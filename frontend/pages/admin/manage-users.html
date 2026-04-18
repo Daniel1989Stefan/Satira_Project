@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Gestionează Userii | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .manage-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-card);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .manage-table th,
+      .manage-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .manage-table th {
+        background-color: rgba(0, 0, 0, 0.02);
+        font-size: 12px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+      }
+      .btn-page {
+        padding: 8px 16px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-card);
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      .btn-page:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .action-container {
+        display: flex;
+        gap: 5px;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      .inline-confirm {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        animation: fadeIn 0.3s;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar">
+      <div class="logo">👥 Management Utilizatori</div>
+      <div class="nav-right">
+        <a
+          href="admin-dashboard.html"
+          id="btn-back-dashboard"
+          class="nav-btn-special"
+        >
+          <i class="fa-solid fa-arrow-left"></i> Dashboard
+        </a>
+      </div>
+    </header>
+
+    <main class="editor-container" style="max-width: 1100px; margin-top: 40px">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 25px;
+        "
+      >
+        <h1>Toți Utilizatorii</h1>
+        <div style="width: 350px; position: relative">
+          <i
+            class="fa-solid fa-magnifying-glass"
+            style="
+              position: absolute;
+              left: 15px;
+              top: 12px;
+              color: var(--text-muted);
+            "
+          ></i>
+          <input
+            type="text"
+            id="user-search"
+            class="input-full"
+            placeholder="Caută email sau nickname..."
+            style="padding-left: 40px"
+          />
+        </div>
+      </div>
+
+      <div id="users-table-wrapper">
+        <p class="text-center">Se încarcă utilizatorii... ⏳</p>
+      </div>
+
+      <div class="pagination-container">
+        <button id="prev-page" class="btn-page">
+          <i class="fa-solid fa-chevron-left"></i> Înapoi
+        </button>
+        <span id="page-info" class="font-bold">Pagina 1</span>
+        <button id="next-page" class="btn-page">
+          Înainte <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/manage-users.js"></script>
+  </body>
+</html>

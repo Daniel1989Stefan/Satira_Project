@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Vizualizare Postare | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">🛡️ Mod Vizualizare Admin</div>
+      <div>
+        <a href="all-posts-admin.html" class="nav-btn">⬅️ Înapoi la Listă</a>
+      </div>
+    </header>
+
+    <main class="feed-container">
+      <div id="admin-top-actions" class="text-center mb-20 mt-20 d-none">
+        <button
+          id="btn-top-edit"
+          class="nav-btn-special"
+          style="margin-right: 10px"
+        >
+          ✏️ Modifică Postarea
+        </button>
+        <button
+          id="btn-top-delete"
+          class="nav-btn-special"
+          style="background-color: #dc3545; border-color: #dc3545"
+        >
+          🗑️ Șterge Postarea
+        </button>
+      </div>
+
+      <div id="post-view-container">
+        <p class="text-center font-bold text-info mt-20">
+          Se încarcă conținutul admin... ⏳
+        </p>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/post-by-id.js"></script>
+    <script src="../../js/ui.js"></script>
+  </body>
+</html>

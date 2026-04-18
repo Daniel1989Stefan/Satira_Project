@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panou de Control Admin | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            Satira Project - Admin Dashboard
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a
+              href="#"
+              id="btn-logout"
+              class="nav-btn-special"
+              style="color: #dc3545; border-color: #dc3545"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Deconectare</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="editor-container">
+      <div class="text-center mb-20">
+        <h1>👋 Bun venit, Admin!</h1>
+        <p class="text-muted">
+          Alege secțiunea pe care dorești să o gestionezi din panoul de control.
+        </p>
+      </div>
+
+      <div class="dashboard-grid">
+        <a href="my-account.html" class="dashboard-card">
+          <span class="card-icon">👤</span>
+          <h3>Contul Meu</h3>
+          <p class="text-muted text-sm">
+            Setări personale, email, schimbare parolă.
+          </p>
+        </a>
+
+        <a href="co-admins-list.html" class="dashboard-card">
+          <span class="card-icon">👥</span>
+          <h3>Echipa Co-Admini</h3>
+          <p class="text-muted text-sm">
+            Adaugă, șterge sau gestionează drepturile co-adminilor.
+          </p>
+        </a>
+
+        <a href="manage-posts.html" class="dashboard-card">
+          <span class="card-icon">📝</span>
+          <h3>Postări & Conținut</h3>
+          <p class="text-muted text-sm">
+            Creează postări noi, editează sau șterge conținut existent.
+          </p>
+        </a>
+
+        <a
+          href="manage-users.html"
+          class="dashboard-card"
+          style="border: 1px solid var(--border-color)"
+        >
+          <span class="card-icon" style="color: var(--text-main)">👥</span>
+          <h3>Gestionează Userii</h3>
+          <p class="text-muted text-sm">
+            Vezi lista completă, caută după email/nickname și activează sau
+            suspendă conturile.
+          </p>
+        </a>
+
+        <a href="settings.html" class="dashboard-card">
+          <span class="card-icon">⚙️</span>
+          <h3>Setări Platformă</h3>
+          <p class="text-muted text-sm">
+            Modifică textele pentru cookies, disclaimer și datele de contact din
+            footer.
+          </p>
+        </a>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/admin-logout.js"></script>
+  </body>
+</html>

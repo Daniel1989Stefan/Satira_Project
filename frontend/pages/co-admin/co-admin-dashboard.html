@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Co-Admin Dashboard | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* Stil general pentru cardurile din dashboard */
+      .dashboard-card {
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        border: 1px solid var(--border-color);
+      }
+
+      .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        border-color: var(--accent-color);
+      }
+
+      .card-icon {
+        font-size: 40px;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      /* Culori specifice pentru fiecare tip de card (ca la Admin) */
+
+      /* 1. Secțiunea Mea - Albastru */
+      .dashboard-card:nth-child(1) .card-icon i {
+        color: #3498db;
+      }
+
+      /* 2. Postări & Conținut - Portocaliu/Chihlimbar */
+      .dashboard-card:nth-child(2) .card-icon i {
+        color: #f39c12;
+      }
+
+      /* 3. Gestionează Userii - Verde */
+      .dashboard-card:nth-child(3) .card-icon i {
+        color: #27ae60;
+      }
+
+      /* 4. Echipa Co-Admini - Mov/Teal */
+      .dashboard-card:nth-child(4) .card-icon i {
+        color: #8e44ad;
+      }
+
+      /* Efect de strălucire discretă la hover pe iconiță */
+      .dashboard-card:hover .card-icon i {
+        filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.1));
+      }
+    </style>
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            Satira Project - Co-Admin Dashboard
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a
+              href="#"
+              id="btn-logout"
+              class="nav-btn-special"
+              style="color: #dc3545; border-color: #dc3545"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Deconectare</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="editor-container">
+      <div class="text-center mb-20">
+        <h1 id="welcome-message">👋 Bun venit!</h1>
+        <p class="text-muted">
+          Mai jos sunt afișate secțiunile la care ai acces în acest moment.
+        </p>
+      </div>
+
+      <div class="dashboard-grid" id="dashboard-grid">
+        <p class="text-center text-muted" style="grid-column: 1 / -1">
+          <i class="fa-solid fa-spinner fa-spin"></i> Se verifică
+          permisiunile...
+        </p>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/admin-logout.js"></script>
+    <script src="../../js/co-admin/co-admin-dashboard.js"></script>
+  </body>
+</html>

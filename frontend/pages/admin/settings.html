@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Setări Platformă & Analytics | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            Satira Project - Setări & Analytics
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a
+              href="admin-dashboard.html"
+              class="nav-btn-special"
+              style="color: var(--text-main); border-color: var(--border-color)"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Dashboard</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="editor-container" style="padding-top: 30px">
+      <div
+        class="admin-section"
+        style="
+          background-color: var(--bg-card);
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+          border: 1px solid var(--border-color);
+          margin-bottom: 30px;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+          "
+        >
+          <h2 style="margin: 0">📊 Statistici Trafic</h2>
+
+          <div style="display: flex; gap: 10px">
+            <button
+              id="btn-stats-30"
+              style="
+                background-color: var(--text-main);
+                color: var(--bg-card);
+                border: none;
+                padding: 8px 15px;
+                border-radius: 5px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.2s;
+              "
+            >
+              30 Zile
+            </button>
+            <button
+              id="btn-stats-365"
+              style="
+                background-color: transparent;
+                color: var(--text-main);
+                border: 1px solid var(--text-main);
+                padding: 8px 15px;
+                border-radius: 5px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.2s;
+              "
+            >
+              365 Zile
+            </button>
+          </div>
+        </div>
+
+        <p
+          id="analytics-status-msg"
+          style="color: var(--text-muted); margin-bottom: 20px"
+        >
+          Se încarcă datele...
+        </p>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+          "
+        >
+          <div
+            style="
+              background-color: var(--bg-color);
+              padding: 20px;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+              text-align: center;
+            "
+          >
+            <i
+              class="fa-solid fa-users"
+              style="font-size: 24px; color: #0d6efd; margin-bottom: 10px"
+            ></i>
+            <h3
+              style="
+                margin-bottom: 5px;
+                color: var(--text-muted);
+                font-size: 14px;
+                text-transform: uppercase;
+              "
+            >
+              Vizitatori Unici
+            </h3>
+            <p
+              id="stat-unique"
+              style="
+                font-size: 28px;
+                font-weight: bold;
+                color: var(--text-main);
+                margin: 0;
+              "
+            >
+              0
+            </p>
+          </div>
+
+          <div
+            style="
+              background-color: var(--bg-color);
+              padding: 20px;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+              text-align: center;
+            "
+          >
+            <i
+              class="fa-solid fa-eye"
+              style="font-size: 24px; color: #198754; margin-bottom: 10px"
+            ></i>
+            <h3
+              style="
+                margin-bottom: 5px;
+                color: var(--text-muted);
+                font-size: 14px;
+                text-transform: uppercase;
+              "
+            >
+              Afișări Totale
+            </h3>
+            <p
+              id="stat-views"
+              style="
+                font-size: 28px;
+                font-weight: bold;
+                color: var(--text-main);
+                margin: 0;
+              "
+            >
+              0
+            </p>
+          </div>
+
+          <div
+            style="
+              background-color: var(--bg-color);
+              padding: 20px;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+              text-align: center;
+            "
+          >
+            <i
+              class="fa-solid fa-cookie-bite"
+              style="font-size: 24px; color: #dc3545; margin-bottom: 10px"
+            ></i>
+            <h3
+              style="
+                margin-bottom: 5px;
+                color: var(--text-muted);
+                font-size: 14px;
+                text-transform: uppercase;
+              "
+            >
+              Refuzuri Cookies
+            </h3>
+            <p
+              id="stat-refusals"
+              style="
+                font-size: 28px;
+                font-weight: bold;
+                color: var(--text-main);
+                margin: 0;
+              "
+            >
+              0
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="admin-section"
+        style="
+          background-color: var(--bg-card);
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+          border: 1px solid var(--border-color);
+        "
+      >
+        <h2 style="margin-bottom: 10px">⚙️ Setări Globale Site</h2>
+        <p class="text-muted" style="margin-bottom: 30px">
+          Aici poți vedea și modifica textele care apar în footer și în bannerul
+          de cookies.
+        </p>
+
+        <div id="view-settings-section">
+          <h3
+            style="
+              margin-bottom: 15px;
+              color: var(--text-main);
+              border-bottom: 1px solid var(--border-color);
+              padding-bottom: 5px;
+            "
+          >
+            Date Curente
+          </h3>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)"
+              >Text Banner Cookies:</strong
+            >
+            <p
+              id="view-cookie-text"
+              style="
+                color: var(--text-muted);
+                margin-top: 5px;
+                background: var(--bg-color);
+                padding: 10px;
+                border-radius: 5px;
+              "
+            >
+              Se încarcă...
+            </p>
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)"
+              >Text Disclaimer (Footer):</strong
+            >
+            <p
+              id="view-disclaimer-text"
+              style="
+                color: var(--text-muted);
+                margin-top: 5px;
+                background: var(--bg-color);
+                padding: 10px;
+                border-radius: 5px;
+              "
+            >
+              Se încarcă...
+            </p>
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)"
+              >Titlu Secțiune Susținere:</strong
+            >
+            <p
+              id="view-support-title"
+              style="
+                color: var(--text-muted);
+                margin-top: 5px;
+                background: var(--bg-color);
+                padding: 10px;
+                border-radius: 5px;
+              "
+            >
+              Se încarcă...
+            </p>
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)"
+              >Descriere Susținere:</strong
+            >
+            <p
+              id="view-support-desc"
+              style="
+                color: var(--text-muted);
+                margin-top: 5px;
+                background: var(--bg-color);
+                padding: 10px;
+                border-radius: 5px;
+              "
+            >
+              Se încarcă...
+            </p>
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)">Text Copyright:</strong>
+            <p
+              id="view-copyright-text"
+              style="
+                color: var(--text-muted);
+                margin-top: 5px;
+                background: var(--bg-color);
+                padding: 10px;
+                border-radius: 5px;
+              "
+            >
+              Se încarcă...
+            </p>
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)">Email Contact:</strong>
+            <p
+              id="view-contact-email"
+              style="color: var(--text-muted); margin-top: 5px"
+            >
+              Se încarcă...
+            </p>
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)">Telefon Contact:</strong>
+            <p
+              id="view-contact-phone"
+              style="color: var(--text-muted); margin-top: 5px"
+            >
+              Se încarcă...
+            </p>
+          </div>
+
+          <div style="margin-bottom: 25px">
+            <strong style="color: var(--text-main)">Website Personal:</strong>
+            <p
+              id="view-contact-website"
+              style="color: var(--text-muted); margin-top: 5px"
+            >
+              Se încarcă...
+            </p>
+          </div>
+
+          <button
+            id="btn-edit-settings"
+            style="
+              background-color: var(--text-main);
+              color: var(--bg-card);
+              font-weight: bold;
+              border: none;
+              padding: 10px 20px;
+              border-radius: 8px;
+              cursor: pointer;
+              transition: opacity 0.2s;
+            "
+          >
+            ✏️ Editează Setările
+          </button>
+        </div>
+
+        <div id="edit-settings-section" style="display: none">
+          <form id="site-settings-form" class="admin-form">
+            <h3
+              style="
+                margin-bottom: 15px;
+                color: var(--text-main);
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 5px;
+              "
+            >
+              Editează Textele Legale
+            </h3>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-cookie-text"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+                >Text Banner Cookies</label
+              >
+              <textarea
+                id="settings-cookie-text"
+                rows="3"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              ></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-disclaimer-text"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+                >Text Disclaimer (Footer)</label
+              >
+              <textarea
+                id="settings-disclaimer-text"
+                rows="3"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              ></textarea>
+            </div>
+
+            <h3
+              style="
+                margin-top: 30px;
+                margin-bottom: 15px;
+                color: var(--text-main);
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 5px;
+              "
+            >
+              Editează Susținere & Copyright
+            </h3>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-support-title"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+                >Titlu Secțiune Susținere</label
+              >
+              <input
+                type="text"
+                id="settings-support-title"
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-support-desc"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+                >Descriere Susținere</label
+              >
+              <textarea
+                id="settings-support-desc"
+                rows="2"
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              ></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-copyright-text"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+                >Text Copyright</label
+              >
+              <input
+                type="text"
+                id="settings-copyright-text"
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              />
+            </div>
+
+            <h3
+              style="
+                margin-top: 30px;
+                margin-bottom: 15px;
+                color: var(--text-main);
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 5px;
+              "
+            >
+              Editează Date de Contact (Footer)
+            </h3>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-contact-email"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+                >Email (Obligatoriu)</label
+              >
+              <input
+                type="email"
+                id="settings-contact-email"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-contact-phone"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+                >Telefon (Opțional)</label
+              >
+              <input
+                type="text"
+                id="settings-contact-phone"
+                placeholder="Ex: +40 700 000 000"
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 30px">
+              <label
+                for="settings-contact-website"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+                >Website Personal (Opțional)</label
+              >
+              <input
+                type="url"
+                id="settings-contact-website"
+                placeholder="Ex: https://domeniultau.ro"
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              />
+            </div>
+
+            <div style="display: flex; gap: 15px; align-items: center">
+              <button
+                type="submit"
+                id="btn-save-settings"
+                style="
+                  background-color: var(--bg-navbar);
+                  color: var(--text-main);
+                  font-weight: bold;
+                  border: 1px solid var(--border-color);
+                  padding: 12px 25px;
+                  border-radius: 8px;
+                  cursor: pointer;
+                  transition: transform 0.2s;
+                "
+              >
+                💾 Salvează Setările
+              </button>
+
+              <button
+                type="button"
+                id="btn-cancel-edit"
+                style="
+                  background-color: transparent;
+                  color: var(--text-muted);
+                  border: 1px solid var(--text-muted);
+                  padding: 12px 25px;
+                  border-radius: 8px;
+                  cursor: pointer;
+                  font-weight: bold;
+                "
+              >
+                ❌ Anulează
+              </button>
+            </div>
+            <p
+              id="settings-status-msg"
+              style="margin-top: 15px; font-weight: bold"
+            ></p>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/admin-logout.js"></script>
+    <script src="../../js/admin/admin-settings.js"></script>
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Editare Avansată | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .gutenberg-block {
+        border: 1px solid var(--border-color);
+        background: var(--bg-card);
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+      .gutenberg-block:hover {
+        border-color: #007bff;
+      }
+      .block-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        border-top: 1px dashed var(--border-color);
+        padding-top: 10px;
+      }
+      .preview-image {
+        max-height: 200px;
+        border-radius: 8px;
+        object-fit: cover;
+        display: block;
+        margin: 10px 0;
+      }
+      .status-badge {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: #28a745;
+        color: white;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .status-badge.editing {
+        background: #ffc107;
+        color: black;
+      }
+    </style>
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            🛡️ Editor Avansat
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a
+              href="all-posts-admin.html"
+              id="btn-back-list"
+              class="nav-btn-special"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Postări</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main
+      class="editor-container"
+      style="margin-top: 40px; margin-bottom: 60px; max-width: 800px"
+    >
+      <div class="text-center mb-20">
+        <h1>✏️ Modifică Postarea</h1>
+        <p class="text-muted">
+          Apasă pe "Modifică" lângă fiecare element pentru a-l edita. Nu uita să
+          salvezi la final!
+        </p>
+      </div>
+
+      <div id="loading-spinner" class="text-center font-bold text-info">
+        Se descarcă structura postării... ⏳
+      </div>
+
+      <form id="edit-post-form" class="d-none" novalidate>
+        <h3
+          class="mb-15"
+          style="
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+          "
+        >
+          1. Date Generale
+        </h3>
+        <div id="fixed-blocks-container"></div>
+
+        <h3
+          class="mt-20 mb-15"
+          style="
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+          "
+        >
+          2. Conținutul Postării
+        </h3>
+        <div id="dynamic-blocks-container"></div>
+
+        <div
+          class="editor-controls mt-20"
+          style="
+            background: rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+          "
+        >
+          <p class="font-bold mb-10">Adaugă elemente noi:</p>
+          <button type="button" class="btn-outline" id="btn-add-text">
+            ➕ Adaugă Text
+          </button>
+          <button type="button" class="btn-outline" id="btn-add-image">
+            📸 Adaugă Poză
+          </button>
+          <button type="button" class="btn-outline" id="btn-add-video">
+            🎥 Adaugă Video
+          </button>
+        </div>
+
+        <div id="edit-message-box" class="message-box mt-20"></div>
+
+        <div
+          style="position: sticky; bottom: 20px; z-index: 100; margin-top: 40px"
+        >
+          <button
+            type="submit"
+            class="btn-primary btn-full"
+            style="
+              padding: 15px;
+              font-size: 18px;
+              box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            "
+          >
+            💾 SALVEAZĂ TOATE MODIFICĂRILE
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/edit-post.js"></script>
+  </body>
+</html>

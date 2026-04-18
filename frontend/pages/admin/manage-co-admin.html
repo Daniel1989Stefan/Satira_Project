@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Detalii Co-Admin | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .admin-profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .admin-profile-avatar {
+        font-size: 60px;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+      }
+
+      /* Grid pentru cardurile de setări */
+      .settings-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 768px) {
+        .settings-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .settings-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 20px;
+      }
+      .settings-card h3 {
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        font-size: 16px;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .checkbox-group input {
+        margin-right: 10px;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+      }
+      .checkbox-group label {
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            ⚙️ Detalii Cont Co-Admin
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a href="co-admins-list.html" class="nav-btn-special">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Echipă</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main
+      class="editor-container"
+      style="margin-top: 40px; margin-bottom: 60px; max-width: 900px"
+    >
+      <div id="loading-spinner" class="text-center font-bold text-info">
+        Se încarcă datele contului... ⏳
+      </div>
+
+      <div id="profile-content" style="display: none">
+        <div class="admin-profile-header">
+          <div class="admin-profile-avatar">
+            <i class="fa-solid fa-circle-user"></i>
+          </div>
+          <h1 id="display-fullname">Nume Co-Admin</h1>
+          <p id="display-email" class="text-muted" style="margin-bottom: 10px">
+            email@exemplu.ro
+          </p>
+          <div id="display-status"></div>
+        </div>
+
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3>
+              <i class="fa-solid fa-id-card text-info"></i> Detaliile contului
+            </h3>
+
+            <div
+              class="form-group mb-15"
+              style="
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 15px;
+              "
+            >
+              <label
+                class="form-label font-bold text-muted"
+                style="display: block; margin-bottom: 5px"
+                >Nume Complet</label
+              >
+
+              <div
+                id="fullname-view-mode"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <span
+                  id="display-fullname-text"
+                  style="
+                    font-weight: 500;
+                    font-size: 15px;
+                    color: var(--text-main);
+                  "
+                ></span>
+                <button
+                  id="btn-edit-fullname-mode"
+                  class="btn-action"
+                  style="
+                    padding: 5px 10px;
+                    font-size: 12px;
+                    background: transparent;
+                    border: 1px solid var(--border-color);
+                    cursor: pointer;
+                    border-radius: 4px;
+                  "
+                >
+                  <i class="fa-solid fa-pen"></i> Modifică
+                </button>
+              </div>
+
+              <div
+                id="fullname-edit-mode"
+                style="
+                  display: none;
+                  margin-top: 10px;
+                  background: rgba(0, 0, 0, 0.02);
+                  padding: 10px;
+                  border-radius: 6px;
+                  border: 1px dashed var(--border-color);
+                "
+              >
+                <input
+                  type="text"
+                  id="input-fullname"
+                  class="input-full"
+                  style="margin-bottom: 10px"
+                />
+                <div style="display: flex; gap: 10px">
+                  <button
+                    id="btn-save-fullname"
+                    class="btn-primary"
+                    style="
+                      flex: 1;
+                      padding: 8px;
+                      background-color: #28a745;
+                      border: none;
+                    "
+                  >
+                    Salvează
+                  </button>
+                  <button
+                    id="btn-cancel-fullname"
+                    class="btn-primary"
+                    style="
+                      flex: 1;
+                      padding: 8px;
+                      background-color: #6c757d;
+                      border: none;
+                    "
+                  >
+                    Anulează
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-10">
+              <label
+                class="form-label font-bold text-muted"
+                style="display: block; margin-bottom: 5px"
+                >Adresă de Email</label
+              >
+
+              <div
+                id="email-view-mode"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <span
+                  id="display-email-text"
+                  style="
+                    font-weight: 500;
+                    font-size: 15px;
+                    color: var(--text-main);
+                  "
+                ></span>
+                <button
+                  id="btn-edit-email-mode"
+                  class="btn-action"
+                  style="
+                    padding: 5px 10px;
+                    font-size: 12px;
+                    background: transparent;
+                    border: 1px solid var(--border-color);
+                    cursor: pointer;
+                    border-radius: 4px;
+                  "
+                >
+                  <i class="fa-solid fa-pen"></i> Modifică
+                </button>
+              </div>
+
+              <div
+                id="email-edit-mode"
+                style="
+                  display: none;
+                  margin-top: 10px;
+                  background: rgba(0, 0, 0, 0.02);
+                  padding: 10px;
+                  border-radius: 6px;
+                  border: 1px dashed var(--border-color);
+                  flex-direction: column;
+                  gap: 10px;
+                "
+              >
+                <input
+                  type="email"
+                  id="input-email"
+                  class="input-full"
+                  placeholder="Noua adresă de email"
+                />
+                <input
+                  type="email"
+                  id="input-confirm-email"
+                  class="input-full"
+                  placeholder="Confirmă noua adresă"
+                />
+                <div style="display: flex; gap: 10px">
+                  <button
+                    id="btn-save-email"
+                    class="btn-primary"
+                    style="
+                      flex: 1;
+                      padding: 8px;
+                      background-color: #28a745;
+                      border: none;
+                    "
+                  >
+                    Salvează
+                  </button>
+                  <button
+                    id="btn-cancel-email"
+                    class="btn-primary"
+                    style="
+                      flex: 1;
+                      padding: 8px;
+                      background-color: #6c757d;
+                      border: none;
+                    "
+                  >
+                    Anulează
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+              "
+            >
+              <h3 style="border: none; padding: 0; margin: 0">
+                <i class="fa-solid fa-key text-success"></i> Permisiuni
+                Administrative
+              </h3>
+              <button
+                id="btn-toggle-permissions-edit"
+                class="btn-action"
+                style="
+                  padding: 5px 10px;
+                  font-size: 12px;
+                  background: transparent;
+                  border: 1px solid var(--border-color);
+                  cursor: pointer;
+                  border-radius: 4px;
+                "
+              >
+                <i class="fa-solid fa-pen"></i> Editează
+              </button>
+            </div>
+
+            <div id="permissions-view-container" class="mb-15"></div>
+
+            <form
+              id="form-update-permissions"
+              style="
+                display: none;
+                background: rgba(0, 0, 0, 0.02);
+                padding: 15px;
+                border-radius: 8px;
+                border: 1px dashed var(--border-color);
+              "
+            >
+              <div id="permissions-edit-container" class="mb-15"></div>
+              <div style="display: flex; gap: 10px">
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  style="
+                    flex: 1;
+                    padding: 10px;
+                    background-color: #28a745;
+                    border: none;
+                  "
+                >
+                  Salvează
+                </button>
+                <button
+                  type="button"
+                  id="btn-cancel-permissions"
+                  class="btn-primary"
+                  style="
+                    flex: 1;
+                    padding: 10px;
+                    background-color: #6c757d;
+                    border: none;
+                  "
+                >
+                  Anulează
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="settings-card">
+            <h3>
+              <i class="fa-solid fa-shield-halved text-warning"></i> Securitate
+              Parolă
+            </h3>
+            <p class="text-sm text-muted mb-15">
+              Trimite un email cu un link securizat prin care co-adminul își
+              poate reseta parola.
+            </p>
+            <button
+              id="btn-reset-password"
+              class="btn-primary btn-full"
+              style="
+                padding: 10px;
+                background-color: #f39c12;
+                border: none;
+                color: white;
+              "
+            >
+              <i class="fa-solid fa-envelope"></i> Trimite Email de Resetare
+            </button>
+          </div>
+
+          <div class="settings-card">
+            <h3>
+              <i class="fa-solid fa-power-off text-error"></i> Gestiune Status
+              Cont
+            </h3>
+            <div id="status-action-container"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/manage-co-admin.js"></script>
+  </body>
+</html>

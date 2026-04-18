@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Gestionare Postări | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            🛡️ Satira - Gestionare Conținut
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <button id="theme-toggle" class="theme-toggle-btn">
+              <i id="theme-icon" class="fa-regular fa-sun"></i>
+            </button>
+            <a
+              href="admin-dashboard.html"
+              id="btn-back-dashboard"
+              class="nav-btn-special"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Dashboard</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main
+      class="editor-container"
+      style="margin-top: 40px; margin-bottom: 60px"
+    >
+      <div class="text-center mb-20">
+        <h1>📝 Gestionare Postări</h1>
+        <p class="text-muted">
+          Panoul de administrare. Totul este complet separat de interfața
+          utilizatorilor publici.
+        </p>
+      </div>
+
+      <div class="dashboard-grid">
+        <a href="create-post.html" class="dashboard-card">
+          <span class="card-icon">➕</span>
+          <h3>Creează o nouă postare</h3>
+          <p class="text-muted text-sm">
+            Adaugă un articol nou pe platformă cu text, imagini și video.
+          </p>
+        </a>
+
+        <a href="all-posts-admin.html" class="dashboard-card">
+          <span class="card-icon">✏️</span>
+          <h3>Modifică o postare</h3>
+          <p class="text-muted text-sm">
+            Deschide lista sigură de administrare pentru a edita un articol
+            existent.
+          </p>
+        </a>
+
+        <a href="all-posts-admin.html" class="dashboard-card">
+          <span class="card-icon">🗑️</span>
+          <h3>Elimină o postare</h3>
+          <p class="text-muted text-sm">
+            Deschide lista sigură de administrare pentru a șterge definitiv un
+            articol.
+          </p>
+        </a>
+
+        <a href="all-posts-admin.html" class="dashboard-card">
+          <span class="card-icon">📰</span>
+          <h3>Vezi toate postările</h3>
+          <p class="text-muted text-sm">
+            Răsfoiește feed-ul complet de articole din panoul de admin.
+          </p>
+        </a>
+
+        <a href="categories-list.html" class="dashboard-card">
+          <span class="card-icon">📁</span>
+          <h3>Vezi pe Categorii</h3>
+          <p class="text-muted text-sm">
+            Răsfoiește lista completă a categoriilor pentru a filtra postările.
+          </p>
+        </a>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/manage-posts.js"></script>
+    <script src="../../js/ui.js"></script>
+  </body>
+</html>

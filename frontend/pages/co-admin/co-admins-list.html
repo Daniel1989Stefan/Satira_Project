@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Co-Admin - Gestiune Echipă | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .team-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-card);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      .team-table th,
+      .team-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .team-table th {
+        background-color: rgba(0, 0, 0, 0.02);
+        font-weight: bold;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .team-table tr:last-child td {
+        border-bottom: none;
+      }
+      .team-table tr:hover {
+        background-color: rgba(0, 0, 0, 0.01);
+      }
+
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .status-active {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status-suspended {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .btn-action {
+        background: transparent;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.2s;
+        border: 1px solid;
+      }
+
+      /* AICI AM ADĂUGAT !important PENTRU A SUPRASCRIE style.css */
+      .btn-suspend {
+        border-color: #dc3545 !important;
+        color: #dc3545 !important;
+      }
+      .btn-suspend:hover {
+        background-color: #dc3545 !important;
+        color: white !important;
+      }
+
+      .btn-activate {
+        border-color: #28a745 !important;
+        color: #28a745 !important;
+      }
+      .btn-activate:hover {
+        background-color: #28a745 !important;
+        color: white !important;
+      }
+    </style>
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            👥 Echipă Co-Admini
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a href="co-admin-dashboard.html" class="nav-btn-special">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Dashboard</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main
+      class="editor-container"
+      style="margin-top: 40px; margin-bottom: 60px; max-width: 900px"
+    >
+      <div style="margin-bottom: 30px">
+        <h1>Colegii Tăi</h1>
+        <p class="text-muted">
+          Aici poți suspenda sau reactiva conturile colegilor, în caz de
+          necesitate.
+        </p>
+      </div>
+
+      <div id="team-container">
+        <p class="text-center text-info font-bold mt-20">
+          Se încarcă lista echipei... ⏳
+        </p>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/co-admin/co-admins-list.js"></script>
+  </body>
+</html>

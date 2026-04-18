@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Admin | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .password-wrapper input {
+        padding-right: 40px;
+      }
+      .password-toggle-icon {
+        position: absolute;
+        right: 15px;
+        cursor: pointer;
+        color: var(--text-muted);
+        transition: color 0.3s ease;
+      }
+      .password-toggle-icon:hover {
+        color: var(--text-main);
+      }
+      .secondary-actions {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .secondary-link {
+        font-size: 13px;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .secondary-link:hover {
+        color: #f39c12;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            🛡️ Autentificare Admin
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a href="#" id="btn-check-dashboard" class="nav-btn-special">
+              <span>Spre Dashboard</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="editor-container">
+      <div class="text-center mb-20">
+        <h1>🔐 Autentificare Admin</h1>
+        <p class="text-muted">
+          Introduceți credențialele pentru a accesa panoul de control.
+        </p>
+      </div>
+
+      <form id="login-admin-form" class="editor-block">
+        <div class="form-group mb-15" style="text-align: left">
+          <label class="form-label font-bold" for="email"
+            >Adresă de Email</label
+          >
+          <input
+            type="email"
+            id="email"
+            class="input-full"
+            required
+            placeholder="admin@satira.ro"
+          />
+        </div>
+
+        <div class="form-group mb-20" style="text-align: left">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 5px;
+            "
+          >
+            <label
+              class="form-label font-bold"
+              style="margin-bottom: 0"
+              for="password"
+              >Parolă</label
+            >
+            <a
+              href="forgot-password.html"
+              style="
+                font-size: 13px;
+                color: #f39c12;
+                text-decoration: none;
+                font-weight: bold;
+              "
+            >
+              Ai uitat parola?
+            </a>
+          </div>
+
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password"
+              class="input-full"
+              required
+              placeholder="••••••••••••"
+            />
+            <i
+              class="fa-solid fa-eye password-toggle-icon"
+              id="toggle-password"
+            ></i>
+          </div>
+        </div>
+
+        <div id="login-message-box" class="message-box mb-15"></div>
+
+        <button type="submit" class="btn-primary btn-full">
+          Intră în cont
+        </button>
+
+        <div class="secondary-actions">
+          <a href="change-temp-password.html" class="secondary-link">
+            <i class="fa-solid fa-key" style="margin-right: 5px"></i>
+            Ai primit o parolă temporară?
+          </a>
+        </div>
+      </form>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/login-admin.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const togglePassword = document.getElementById("toggle-password");
+        const passwordInput = document.getElementById("password");
+
+        if (togglePassword && passwordInput) {
+          togglePassword.addEventListener("click", function () {
+            const type =
+              passwordInput.getAttribute("type") === "password"
+                ? "text"
+                : "password";
+            passwordInput.setAttribute("type", type);
+            this.classList.toggle("fa-eye");
+            this.classList.toggle("fa-eye-slash");
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

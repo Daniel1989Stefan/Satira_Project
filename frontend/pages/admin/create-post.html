@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Creare Postare Nouă | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+  </head>
+  <body>
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            🛡️ Satira - Panou Administrare
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a
+              href="manage-posts.html"
+              id="btn-back-dashboard"
+              class="nav-btn-special"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Opțiuni</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="editor-container">
+      <h1>✍️ Scrie o postare nouă</h1>
+
+      <form id="create-post-form">
+        <div class="editor-block">
+          <label class="form-label font-bold">Titlul Postării *</label>
+          <input
+            type="text"
+            id="post-title"
+            class="input-full mb-15"
+            required
+            placeholder="Ex: De ce iubim pisicile?"
+          />
+
+          <label class="form-label font-bold">Subtitlu (Opțional)</label>
+          <input
+            type="text"
+            id="post-subtitle"
+            class="input-full mb-15"
+            placeholder="Un scurt rezumat..."
+          />
+
+          <label class="form-label font-bold">Categoria *</label>
+          <select id="category-select" class="input-full mb-15" required>
+            <option value="" disabled selected>
+              -- Se încarcă categoriile... --
+            </option>
+          </select>
+
+          <input
+            type="text"
+            id="new-category-input"
+            class="input-full mb-15 d-none"
+            placeholder="Numele noii categorii (Ex: tehnologie)"
+          />
+
+          <label class="form-label font-bold"
+            >Poza Principală (Cover) * - Apare doar în feed</label
+          >
+          <input
+            type="file"
+            id="post-cover"
+            class="input-full"
+            accept="image/*"
+            required
+          />
+        </div>
+
+        <h2 class="mt-20">Conținutul Postării</h2>
+        <p class="text-muted mb-20">
+          Adaugă text și imagini în ordinea în care vrei să apară pe ecran.
+        </p>
+
+        <div id="blocks-container"></div>
+
+        <div class="editor-controls">
+          <button type="button" class="btn-outline" id="btn-add-text">
+            ➕ Adaugă Text
+          </button>
+          <button type="button" class="btn-outline" id="btn-add-image">
+            📸 Adaugă Poză
+          </button>
+          <button type="button" class="btn-outline" id="btn-add-video">
+            🎥 Adaugă Video
+          </button>
+        </div>
+
+        <div id="create-message-box" class="message-box mt-20"></div>
+
+        <button type="submit" class="btn-primary btn-full mt-20">
+          🚀 Publică Postarea
+        </button>
+      </form>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/create-post.js"></script>
+  </body>
+</html>

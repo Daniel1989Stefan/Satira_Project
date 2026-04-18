@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Informații Profil | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body class="login-page">
+    <header class="navbar">
+      <div class="navbar-top">
+        <div class="nav-container-inner">
+          <div class="nav-left">
+            <button id="hamburger-btn" class="hamburger-btn">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <a
+              href="https://www.buymeacoffee.com/stefan.danca.dev"
+              target="_blank"
+              class="nav-bmac-link"
+            >
+              <img
+                src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+                alt="Buy Me A Coffee"
+                class="nav-bmac-img"
+              />
+            </a>
+          </div>
+
+          <div class="nav-center">
+            <a href="../../index.html">
+              <img
+                src="../../img/logo.svg"
+                alt="Satira Logo"
+                class="site-logo logo-day"
+              />
+              <img
+                src="../../img/logo-dark.svg"
+                alt="Satira Logo"
+                class="site-logo logo-night"
+              />
+            </a>
+          </div>
+
+          <div class="nav-right">
+            <div class="nav-right-actions">
+              <button id="theme-toggle" class="theme-toggle-btn">
+                <img
+                  src="../../img/light-mode.svg"
+                  class="icon-zi"
+                  alt="Mod Zi"
+                />
+                <img
+                  src="../../img/dark-mode.svg"
+                  class="icon-noapte"
+                  alt="Mod Noapte"
+                />
+              </button>
+
+              <div id="user-menu-top">
+                <button
+                  id="logout-btn"
+                  class="nav-btn-special"
+                  style="background-color: #dc3545"
+                >
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <nav id="sidebar-menu" class="sidebar-menu">
+      <div class="sidebar-header">
+        <h3>Meniu</h3>
+        <button id="close-sidebar-btn" class="close-sidebar-btn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="sidebar-content" id="sidebar-content-area">
+        <a href="../../index.html" class="sidebar-item font-bold"
+          >🏠 Toate Postările</a
+        >
+        <button
+          id="toggle-categories-btn"
+          class="sidebar-item sidebar-btn font-bold"
+        >
+          <span>📂 Postări pe Categorii</span>
+          <span id="toggle-icon" class="toggle-icon">▼</span>
+        </button>
+        <div id="sidebar-categories-list"></div>
+        <div
+          id="sidebar-auth-links"
+          style="
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 5px;
+          "
+        ></div>
+      </div>
+    </nav>
+
+    <main
+      class="profile-page-container"
+      style="margin-top: 40px; margin-bottom: 40px; width: 100%"
+    >
+      <div class="profile-page-header">
+        <h2>Informații Profil</h2>
+      </div>
+
+      <div class="profile-main-card">
+        <div class="profile-avatar-circle" id="avatar-letter">?</div>
+        <div class="profile-user-details">
+          <h3 id="display-nickname">Se încarcă...</h3>
+          <p id="member-since">Membru din: ...</p>
+        </div>
+      </div>
+
+      <div class="profile-info-section">
+        <div class="profile-input-box">
+          <label>Adresă Email</label>
+          <div class="info-value">
+            <span id="display-email">se încarcă...</span>
+            <span id="verification-badge" class="badge">...</span>
+          </div>
+
+          <div id="resend-container" class="text-left mt-10 d-none">
+            <button
+              id="resend-btn"
+              style="
+                background: none;
+                border: none;
+                color: var(--btn-special);
+                cursor: pointer;
+                padding: 0;
+                text-decoration: underline;
+              "
+            >
+              Retrimite link de verificare
+            </button>
+            <div
+              id="resend-message"
+              style="font-size: 12px; margin-top: 5px"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-actions-grid">
+        <div id="auth-provider-badge"></div>
+
+        <a href="change-nickname.html" class="profile-btn"
+          >✏️ Editează Nickname</a
+        >
+        <a
+          href="change-email.html"
+          id="change-email-section"
+          class="profile-btn"
+          >📧 Schimbă Adresa de Email</a
+        >
+
+        <div id="change-password-section">
+          <a href="change-password.html" class="profile-btn"
+            >🔒 Schimbă Parola</a
+          >
+        </div>
+
+        <a href="deactivate-account.html" class="profile-btn danger"
+          >⚠️ Dezactivează Contul</a
+        >
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-section footer-left">
+          <h3>Disclaimer</h3>
+          <p id="footer-disclaimer-text">Se încarcă...</p>
+        </div>
+
+        <div class="footer-section footer-center">
+          <h3 id="footer-support-title">Susține Proiectul</h3>
+          <p id="footer-support-desc" style="margin-bottom: 15px">
+            Se încarcă...
+          </p>
+
+          <a
+            href="https://www.buymeacoffee.com/stefan.danca.dev"
+            target="_blank"
+            style="
+              display: inline-block;
+              background-color: #ffdd00 !important;
+              color: #000000 !important;
+              padding: 10px 20px;
+              border-radius: 8px;
+              font-weight: bold;
+              text-decoration: none;
+              font-size: 14px;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              transition: transform 0.2s;
+            "
+          >
+            <i class="fa-solid fa-mug-hot" style="margin-right: 8px"></i> Buy me
+            a Coffee
+          </a>
+        </div>
+
+        <div class="footer-section footer-right">
+          <h3>Contact</h3>
+          <div id="footer-contact-container">
+            <p>Se încarcă...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom" id="footer-copyright-text">
+        &copy; 2026 Ziarul cu Minciuni. Toate drepturile rezervate.
+      </div>
+    </footer>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/user/profile.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script src="../../js/user/posts.js"></script>
+  </body>
+</html>

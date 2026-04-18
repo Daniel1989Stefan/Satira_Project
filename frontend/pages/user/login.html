@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Autentificare | Ziarul cu Minciuni</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body class="login-page">
+    <header class="navbar">
+      <div class="navbar-top">
+        <div class="nav-container-inner">
+          <div class="nav-left">
+            <button id="hamburger-btn" class="hamburger-btn">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <a
+              href="https://www.buymeacoffee.com/stefan.danca.dev"
+              target="_blank"
+              class="nav-bmac-link"
+            >
+              <img
+                src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+                alt="Buy Me A Coffee"
+                class="nav-bmac-img"
+              />
+            </a>
+          </div>
+
+          <div class="nav-center">
+            <a href="../../index.html">
+              <img
+                src="../../img/logo.svg"
+                alt="Satira Logo"
+                class="site-logo logo-day"
+              />
+              <img
+                src="../../img/logo-dark.svg"
+                alt="Satira Logo"
+                class="site-logo logo-night"
+              />
+            </a>
+          </div>
+
+          <div class="nav-right">
+            <div class="nav-right-actions">
+              <button id="theme-toggle" class="theme-toggle-btn">
+                <img
+                  src="../../img/light-mode.svg"
+                  class="icon-zi"
+                  alt="Mod Zi"
+                />
+                <img
+                  src="../../img/dark-mode.svg"
+                  class="icon-noapte"
+                  alt="Mod Noapte"
+                />
+              </button>
+
+              <div id="user-menu-top">
+                <a
+                  href="../../index.html"
+                  id="special-action-btn"
+                  class="nav-btn-special"
+                >
+                  <i class="fa-solid fa-house"></i> <span>Înapoi la Site</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <nav id="sidebar-menu" class="sidebar-menu">
+      <div class="sidebar-header">
+        <h3>Meniu</h3>
+        <button id="close-sidebar-btn" class="close-sidebar-btn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="sidebar-content" id="sidebar-content-area">
+        <a href="../../index.html" class="sidebar-item font-bold"
+          >🏠 Toate Postările</a
+        >
+        <button
+          id="toggle-categories-btn"
+          class="sidebar-item sidebar-btn font-bold"
+        >
+          <span>📂 Postări pe Categorii</span>
+          <span id="toggle-icon" class="toggle-icon">▼</span>
+        </button>
+        <div id="sidebar-categories-list"></div>
+        <div
+          id="sidebar-auth-links"
+          style="
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 5px;
+          "
+        >
+          <a
+            href="../../index.html"
+            class="sidebar-item font-bold"
+            style="border-bottom: none"
+            ><i class="fa-solid fa-house"></i> Înapoi la Site</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <div class="login-box" style="margin-top: 40px; margin-bottom: 40px">
+      <h2 class="text-center mb-20">Autentificare</h2>
+
+      <div
+        id="google-btn-container"
+        class="mb-15"
+        style="display: flex; justify-content: center"
+      ></div>
+      <input
+        type="hidden"
+        id="g-client-id"
+        value="5008049955-vdi1hb076r1hfbhl7ohoia0c6umpac51.apps.googleusercontent.com"
+      />
+
+      <div class="text-center text-muted mb-15" style="font-size: 14px">
+        <span>--------- SAU ---------</span>
+      </div>
+
+      <form id="login-form">
+        <label for="email" class="form-label text-muted text-sm d-block mb-10"
+          >Email</label
+        >
+        <div class="input-icon-group">
+          <i class="fa-regular fa-envelope icon-left"></i>
+          <input
+            type="email"
+            id="email"
+            required
+            placeholder="adresa@email.com"
+          />
+        </div>
+
+        <label
+          for="password"
+          class="form-label text-muted text-sm d-block mb-10"
+          >Parolă</label
+        >
+        <div class="input-icon-group">
+          <i class="fa-solid fa-lock icon-left"></i>
+          <input
+            type="password"
+            id="password"
+            required
+            placeholder="••••••••"
+          />
+          <i class="fa-regular fa-eye icon-eye" id="toggle-password-icon"></i>
+        </div>
+
+        <div style="text-align: right; margin-bottom: 20px">
+          <a
+            href="forgot-password.html"
+            class="link-primary text-sm"
+            style="color: var(--btn-special)"
+            >Ai uitat parola?</a
+          >
+        </div>
+
+        <div
+          class="g-recaptcha mb-15"
+          style="display: flex; justify-content: center"
+          data-sitekey="6Lfc_KIsAAAAAMciuAl5kVBzC_GrlOi4XDA0qmxw"
+        ></div>
+
+        <div id="login-message-box" class="message-box mb-15"></div>
+
+        <button type="submit" class="btn-primary btn-full">
+          Autentifică-te
+        </button>
+
+        <div
+          class="text-center mt-20"
+          style="font-size: 14px; color: var(--text-muted)"
+        >
+          Ai deja cont?
+          <a
+            href="register.html"
+            class="link-primary font-bold"
+            style="color: var(--btn-special)"
+            >Înregistrează-te</a
+          >
+        </div>
+      </form>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-section footer-left">
+          <h3>Disclaimer</h3>
+          <p id="footer-disclaimer-text">Se încarcă...</p>
+        </div>
+
+        <div class="footer-section footer-center">
+          <h3 id="footer-support-title">Susține Proiectul</h3>
+          <p id="footer-support-desc" style="margin-bottom: 15px">
+            Se încarcă...
+          </p>
+
+          <a
+            href="https://www.buymeacoffee.com/stefan.danca.dev"
+            target="_blank"
+            style="
+              display: inline-block;
+              background-color: #ffdd00 !important;
+              color: #000000 !important;
+              padding: 10px 20px;
+              border-radius: 8px;
+              font-weight: bold;
+              text-decoration: none;
+              font-size: 14px;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              transition: transform 0.2s;
+            "
+          >
+            <i class="fa-solid fa-mug-hot" style="margin-right: 8px"></i> Buy me
+            a Coffee
+          </a>
+        </div>
+
+        <div class="footer-section footer-right">
+          <h3>Contact</h3>
+          <div id="footer-contact-container">
+            <p>Se încarcă...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom" id="footer-copyright-text">
+        &copy; 2026 Ziarul cu Minciuni. Toate drepturile rezervate.
+      </div>
+    </footer>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/user/auth.js"></script>
+    <script src="../../js/ui.js"></script>
+  </body>
+</html>

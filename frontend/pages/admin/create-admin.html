@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setup Cont Admin | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">Satira Project - Setup</div>
+      <div>
+        <a href="../../index.html" class="nav-btn">⬅️ Înapoi la Site</a>
+      </div>
+    </header>
+
+    <main class="editor-container">
+      <div class="text-center mb-20">
+        <h1>👑 Creare Cont Administrator</h1>
+        <p class="text-muted">
+          Acest formular este securizat și necesită codul de activare master.
+        </p>
+      </div>
+
+      <form id="create-admin-form" class="editor-block">
+        <label class="form-label font-bold" for="fullname"
+          >Nume Complet *</label
+        >
+        <input
+          type="text"
+          id="fullname"
+          class="input-full mb-15"
+          required
+          placeholder="Ex: Popescu Ion"
+        />
+
+        <label class="form-label font-bold" for="email"
+          >Adresă de Email *</label
+        >
+        <input
+          type="email"
+          id="email"
+          class="input-full mb-15"
+          required
+          placeholder="admin@satira.ro"
+        />
+
+        <label class="form-label font-bold" for="confirmEmail"
+          >Confirmă Email *</label
+        >
+        <input
+          type="email"
+          id="confirmEmail"
+          class="input-full mb-15"
+          required
+          placeholder="admin@satira.ro"
+        />
+
+        <label class="form-label font-bold" for="password">Parolă *</label>
+        <input
+          type="password"
+          id="password"
+          class="input-full mb-15"
+          required
+          placeholder="••••••••••••"
+        />
+
+        <label class="form-label font-bold" for="confirmPassword"
+          >Confirmă Parolă *</label
+        >
+        <input
+          type="password"
+          id="confirmPassword"
+          class="input-full mb-10"
+          required
+          placeholder="••••••••••••"
+        />
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="show-password" class="cursor-pointer" />
+          <label for="show-password" class="cursor-pointer text-muted"
+            >👁️ Arată parolele</label
+          >
+        </div>
+
+        <hr class="post-divider mb-15" />
+
+        <label class="form-label font-bold text-error" for="activationCode"
+          >Cod de Activare Master *</label
+        >
+        <input
+          type="password"
+          id="activationCode"
+          class="input-full mb-15"
+          required
+          placeholder="Introdu codul secret..."
+        />
+
+        <div id="admin-message-box" class="message-box mb-15"></div>
+
+        <button type="submit" class="btn-primary btn-full">
+          Creează Contul de Admin
+        </button>
+      </form>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/create-admin.js"></script>
+  </body>
+</html>

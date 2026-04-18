@@ -1,0 +1,65 @@
+
+User:
+    - create account + verify email (nu influenteaza cu ceva daca verifica sau nu emailul)
+    - poate schimba parola / emailul / nickname daca confirma parola curenta
+    - pot da like/dislike la postari doar daca sunt logati
+    - pot vizualiza postarile chiar daca nu au cont
+
+Admin:
+    - poate exista unul singur
+    - activarea se face din ruta /admin/activate-admin cu un 'secret cod' din ENV
+    - emailul asemnat adminului nu se verifica ca la useri
+    - in caz de pierdere fdate acces, exista "break glass" din fisierul 'scripts'
+    - poate schimba emailul / parola / fullane confirmand parola curenta
+    - exista si posibilitatea de 'forgot password' si are nevoie de acces la email pt a-l schimba
+    -pot schimba fullname sau emailul co-adminilor
+    - singurul care poate crea admini si care poate asemna permisiunile pt admini
+    - are toate permisiunile (create co-admin, deactivate co-admin/useri, reactivate them, create/edit/delete posts)
+    
+
+Co-Admini:
+    - sunt creeati de catre admini si se utilizeaza emailul pt a schimba parola temporara de activare
+    -emailul asemnat co-adminilor nu se verifica ca la useri 
+    - daca au permisiuni pot crea/modifica/elimina postari, pot deactiva sau reactiva alti co-admini, pot deactiva sau reactiva useri
+    - nu pot asemna permisiuni altor co-admini
+
+
+# 📰 Ziarul cu Minciuni - Proiect Full-Stack Satiră
+
+**Ziarul cu Minciuni** este o platformă web completă dedicată satirei sociale, construită pentru a oferi o experiență de lectură modernă, interactivă și amuzantă. Proiectul include un sistem complex de gestionare a conținutului (CMS) pentru administratori și o interfață intuitivă pentru cititori.
+
+---
+
+## ✨ Funcționalități Principale
+
+### 🌍 Frontend (Interfața Utilizatorului)
+- **Design Adaptiv (Responsive):** Optimizat pentru mobil, tabletă și desktop.
+- **Day/Night Mode:** Comutator vizual custom cu pictograme SVG personalizate.
+- **Sistem de Reacții:** Like/Dislike în timp real pentru articole (necesită autentificare).
+- **Distribuire Socială:** Integrare cu WhatsApp, Facebook și Instagram.
+- **Categorii Dinamice:** Filtrarea articolelor pe categorii preluate din backend.
+
+### ⚙️ Backend & Admin (Creierul Aplicației)
+- **Autentificare Securizată:** Sistem de Login/Register și integrare cu Google Auth.
+- **Panou de Control Admin:** Creare, editare și ștergere articole prin interfață vizuală.
+- **Gestionare Media:** Încărcare imagini și videoclipuri pe **Cloudflare R2** (S3 compatible storage).
+- **API RESTful:** Construit cu Node.js și Express.
+- **Bază de Date:** MongoDB (Atlas) pentru stocarea postărilor, utilizatorilor și setărilor globale.
+
+---
+
+## 🛠️ Tehnologii Utilizate
+
+| Componentă | Tehnologie |
+| :--- | :--- |
+| **Frontend** | HTML5, CSS3, JavaScript (Vanilla JS) |
+| **Backend** | Node.js, Express.js |
+| **Bază de Date** | MongoDB (Mongoose) |
+| **Stocare Cloud** | Cloudflare R2 |
+| **Securitate** | JWT (JSON Web Tokens), Bcrypt |
+| **Deployment** | GitHub Pages (Frontend), Render (Backend) |
+
+---
+
+## 🚀 Instalare și Configurare locală
+

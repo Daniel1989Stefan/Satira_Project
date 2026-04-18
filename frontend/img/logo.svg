@@ -1,0 +1,26 @@
+<svg width="100%" viewBox="0 0 680 104" role="img" xmlns="http://www.w3.org/2000/svg"><defs><mask id="imagine-text-gaps-rhhshg" maskUnits="userSpaceOnUse"><rect x="0" y="0" width="680" height="104" fill="white"/><rect x="319.93109130859375" y="-4.578802585601807" width="40.80161666870117" height="17.601317405700684" fill="black" rx="2"/><rect x="105.9346694946289" y="5.462934970855713" width="468.13067626953125" height="51.604610443115234" fill="black" rx="2"/><rect x="209.520751953125" y="47.90993881225586" width="260.9585418701172" height="19.11257553100586" fill="black" rx="2"/></mask></defs>
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Logo Ziarul Mincinos</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Logo satiric cu titlu și slogan</desc>
+
+  
+
+  <!-- Top decorative lines -->
+  <line x1="60" y1="4" x2="295" y2="4" style="fill:none;stroke:rgb(26, 26, 26);color:rgb(0, 0, 0);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="385" y1="4" x2="620" y2="4" style="fill:none;stroke:rgb(26, 26, 26);color:rgb(0, 0, 0);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="60" y1="8" x2="295" y2="8" mask="url(#imagine-text-gaps-rhhshg)" style="fill:none;stroke:rgb(136, 136, 136);color:rgb(0, 0, 0);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="385" y1="8" x2="620" y2="8" mask="url(#imagine-text-gaps-rhhshg)" style="fill:none;stroke:rgb(136, 136, 136);color:rgb(0, 0, 0);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Stars -->
+  <text x="340" y="8" text-anchor="middle" style="font-size:11px;;fill:rgb(178, 34, 34);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">★ ★ ★</text>
+
+  <!-- Main title -->
+  <text x="340" y="46" text-anchor="middle" style="fill:rgb(26, 26, 26);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Georgia, serif;font-size:42px;font-weight:700;text-anchor:middle;dominant-baseline:auto">ZIARUL MINCINOS</text>
+
+  <!-- Slogan -->
+  <text x="340" y="74" text-anchor="middle" style="fill:rgb(85, 85, 85);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Georgia, serif;font-size:25.2px;font-weight:400;font-style:italic;text-anchor:middle;dominant-baseline:auto">Cu noi nu vei afla niciodată adevărul</text>
+
+  <!-- Bottom decorative lines -->
+  <line x1="60" y1="88" x2="620" y2="88" style="fill:none;stroke:rgb(136, 136, 136);color:rgb(0, 0, 0);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="60" y1="92" x2="620" y2="92" style="fill:none;stroke:rgb(26, 26, 26);color:rgb(0, 0, 0);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+</svg>

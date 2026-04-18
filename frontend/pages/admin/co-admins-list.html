@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Echipa Co-Admini | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* Stiluri specifice pentru tabelul de echipă */
+      .team-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-card);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      .team-table th,
+      .team-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .team-table th {
+        background-color: rgba(0, 0, 0, 0.02);
+        font-weight: bold;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .team-table tr:last-child td {
+        border-bottom: none;
+      }
+      .team-table tr:hover {
+        background-color: rgba(0, 0, 0, 0.01);
+      }
+
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .status-active {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status-suspended {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .btn-action {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        color: var(--text-main);
+        transition: all 0.2s;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-action:hover {
+        border-color: #f39c12;
+        color: #f39c12;
+      }
+
+      /* Stiluri adăugate pentru Managerul de Permisiuni */
+      .settings-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 20px;
+      }
+      .settings-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 768px) {
+        .settings-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            👥 Gestiune Echipă (Co-Admini)
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <button id="theme-toggle" class="theme-toggle-btn">
+              <i id="theme-icon" class="fa-regular fa-sun"></i>
+            </button>
+            <a href="admin-dashboard.html" class="nav-btn-special">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Dashboard</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main
+      class="editor-container"
+      style="margin-top: 40px; margin-bottom: 60px; max-width: 900px"
+    >
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 30px;
+        "
+      >
+        <div>
+          <h1>Echipa Ta</h1>
+          <p class="text-muted">
+            Gestionează accesul și permisiunile co-adminilor.
+          </p>
+        </div>
+        <div>
+          <a
+            href="create-co-admin.html"
+            class="btn-primary"
+            style="padding: 10px 20px; font-weight: bold; text-decoration: none"
+          >
+            <i class="fa-solid fa-user-plus"></i> Creează un nou Co-Admin
+          </a>
+        </div>
+      </div>
+
+      <div id="team-container">
+        <p class="text-center text-info font-bold mt-20">
+          Se încarcă lista echipei... ⏳
+        </p>
+      </div>
+
+      <div
+        class="settings-card"
+        id="permissions-manager-section"
+        style="margin-top: 40px; display: none"
+      >
+        <h3
+          style="
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+          "
+        >
+          <i class="fa-solid fa-user-shield text-warning"></i> Manager de
+          Permisiuni
+        </h3>
+
+        <div class="settings-grid" style="align-items: start">
+          <div
+            style="
+              background: rgba(0, 0, 0, 0.02);
+              padding: 15px;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+            "
+          >
+            <h4 style="margin-top: 0; margin-bottom: 15px; font-size: 15px">
+              1. Filtrează după Permisiune
+            </h4>
+            <div class="form-group mb-10">
+              <select
+                id="select-permission-filter"
+                class="input-full"
+                style="
+                  cursor: pointer;
+                  padding: 10px;
+                  border-radius: 5px;
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <option value="">-- Alege o permisiune --</option>
+              </select>
+            </div>
+            <div id="filtered-coadmins-result" style="margin-top: 15px">
+              <p class="text-muted text-sm" style="margin: 0">
+                Selectează o permisiune pentru a vedea cine o are activă.
+              </p>
+            </div>
+          </div>
+
+          <div
+            style="
+              background: rgba(0, 0, 0, 0.02);
+              padding: 15px;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+            "
+          >
+            <h4 style="margin-top: 0; margin-bottom: 15px; font-size: 15px">
+              2. Verifică Permisiuni Co-Admin
+            </h4>
+            <div class="form-group mb-10">
+              <select
+                id="select-coadmin-filter"
+                class="input-full"
+                style="
+                  cursor: pointer;
+                  padding: 10px;
+                  border-radius: 5px;
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <option value="">-- Alege un Co-Admin --</option>
+              </select>
+            </div>
+            <div
+              id="coadmin-permissions-result"
+              style="margin-top: 15px; min-height: 120px"
+            >
+              <p class="text-muted text-sm" style="margin: 0">
+                Selectează un co-admin pentru a-i vedea permisiunile.
+              </p>
+            </div>
+
+            <a
+              href="#"
+              id="btn-edit-filtered-coadmin"
+              class="btn-primary btn-full"
+              style="
+                display: none;
+                text-align: center;
+                padding: 10px;
+                margin-top: 15px;
+                text-decoration: none;
+                background-color: #f39c12;
+                border: none;
+                color: white;
+              "
+            >
+              <i class="fa-solid fa-pen"></i> Editează Profil & Permisiuni
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/co-admins-list.js"></script>
+    <script src="../../js/ui.js"></script>
+  </body>
+</html>

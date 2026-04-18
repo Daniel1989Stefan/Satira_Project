@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Co-Admin | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .password-wrapper input {
+        padding-right: 40px;
+      }
+      .password-toggle-icon {
+        position: absolute;
+        right: 15px;
+        cursor: pointer;
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            👥 Autentificare Co-Admin
+          </div>
+        </div>
+        <div class="nav-right">
+          <a href="../admin/login-admin.html" class="nav-btn-special">
+            <span>Ești Admin Principal?</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="editor-container">
+      <div class="text-center mb-20">
+        <h1>🔑 Login Co-Admin</h1>
+        <p class="text-muted">
+          Introduceți credențialele pentru a accesa panoul de control.
+        </p>
+      </div>
+
+      <form id="form-login-coadmin" class="editor-block">
+        <div class="form-group mb-15" style="text-align: left">
+          <label class="form-label font-bold" for="email"
+            >Adresă de Email</label
+          >
+          <input
+            type="email"
+            id="email"
+            class="input-full"
+            required
+            placeholder="nume@satira.ro"
+          />
+        </div>
+
+        <div class="form-group mb-20" style="text-align: left">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 5px;
+            "
+          >
+            <label
+              class="form-label font-bold"
+              style="margin-bottom: 0"
+              for="password"
+              >Parolă</label
+            >
+          </div>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password"
+              class="input-full"
+              required
+              placeholder="••••••••••••"
+            />
+            <i
+              class="fa-solid fa-eye password-toggle-icon"
+              id="toggle-password"
+            ></i>
+          </div>
+        </div>
+
+        <div
+          id="login-message-box"
+          class="message-box mb-15"
+          style="
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+          "
+        ></div>
+
+        <button type="submit" class="btn-primary btn-full">
+          Intră în cont
+        </button>
+      </form>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/co-admin/login-co-admin.js"></script>
+  </body>
+</html>

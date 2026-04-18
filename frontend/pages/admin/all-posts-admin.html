@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Toate Postările | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            🛡️ Satira - Panou Administrare
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <button id="theme-toggle" class="theme-toggle-btn">
+              <i id="theme-icon" class="fa-regular fa-sun"></i>
+            </button>
+            <a
+              href="manage-posts.html"
+              id="btn-back-dashboard"
+              class="nav-btn-special"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Opțiuni</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="feed-container" style="margin-top: 40px; margin-bottom: 60px">
+      <div class="text-center mb-20">
+        <h1>📂 Toate Postările</h1>
+        <p class="text-muted">
+          Alege postarea pe care dorești să o modifici sau să o elimini din
+          sistem.
+        </p>
+      </div>
+
+      <div id="posts-container">
+        <p class="text-center font-bold text-info mt-20">
+          Se încarcă postările... ⏳
+        </p>
+      </div>
+
+      <div id="pagination-container" class="pagination-container mt-20"></div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/all-posts-admin.js"></script>
+    <script src="../../js/ui.js"></script>
+  </body>
+</html>

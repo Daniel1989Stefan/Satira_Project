@@ -1,0 +1,13 @@
+<svg width="220" height="72" viewBox="0 0 220 72" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background pill -->
+  <rect x="2" y="2" width="216" height="68" rx="34" fill="rgb(15,15,15)"/>
+
+  <!-- Text -->
+  <text x="22" y="44" font-family="Arial Black, Arial, sans-serif" font-size="19" font-weight="900" fill="white" letter-spacing="0.5">DARK MODE</text>
+
+  <!-- Circle knob (right side) -->
+  <circle cx="181" cy="36" r="28" fill="white"/>
+
+  <!-- Moon icon (crescent) -->
+  <path d="M188,24 A14,14 0 1,0 188,48 A10,10 0 1,1 188,24 Z" fill="rgb(15,15,15)"/>
+</svg>

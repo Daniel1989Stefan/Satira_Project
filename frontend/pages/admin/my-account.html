@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Contul Meu | Ziarul cu Minciuni</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .settings-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 20px;
+      }
+      .settings-card h3 {
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        font-size: 16px;
+      }
+      .settings-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 768px) {
+        .settings-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .password-wrapper input {
+        padding-right: 40px;
+      }
+      .password-toggle-icon {
+        position: absolute;
+        right: 15px;
+        cursor: pointer;
+        color: var(--text-muted);
+        transition: color 0.3s ease;
+      }
+      .password-toggle-icon:hover {
+        color: var(--text-main);
+      }
+    </style>
+  </head>
+  <body style="background-color: var(--bg-color)">
+    <header class="navbar" style="width: 100%">
+      <div class="navbar-top">
+        <div class="nav-left">
+          <div
+            class="logo font-bold"
+            style="color: var(--text-main); font-size: 20px"
+          >
+            👤 Setări Cont Admin
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-right-actions">
+            <a href="admin-dashboard.html" class="nav-btn-special">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Înapoi la Dashboard</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main
+      class="editor-container"
+      style="margin-top: 40px; margin-bottom: 60px; max-width: 900px"
+    >
+      <div style="text-align: center; margin-bottom: 30px">
+        <i
+          class="fa-solid fa-circle-user text-muted"
+          style="font-size: 60px; margin-bottom: 10px"
+        ></i>
+        <h1 id="display-header-name">Se încarcă...</h1>
+        <p id="display-header-email" class="text-muted">Așteaptă un moment.</p>
+        <span
+          class="status-badge status-active"
+          style="
+            display: inline-block;
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+          "
+        >
+          <i class="fa-solid fa-crown"></i> Administrator Principal
+        </span>
+      </div>
+
+      <div class="settings-grid">
+        <div
+          class="settings-card"
+          style="background-color: rgba(0, 0, 0, 0.01)"
+        >
+          <h3>
+            <i class="fa-solid fa-circle-info text-success"></i> Datele Curente
+          </h3>
+          <div class="form-group mb-15">
+            <label class="form-label text-muted font-bold">Nume Complet</label>
+            <div
+              id="info-current-name"
+              style="
+                font-size: 16px;
+                font-weight: 500;
+                color: var(--text-main);
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border-color);
+              "
+            >
+              Se încarcă...
+            </div>
+          </div>
+          <div class="form-group mb-10">
+            <label class="form-label text-muted font-bold"
+              >Adresă de Email</label
+            >
+            <div
+              id="info-current-email"
+              style="
+                font-size: 16px;
+                font-weight: 500;
+                color: var(--text-main);
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border-color);
+              "
+            >
+              Se încarcă...
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h3>
+            <i class="fa-solid fa-id-badge text-info"></i> Actualizare Nume
+          </h3>
+          <form id="form-update-name">
+            <div class="form-group mb-10">
+              <label class="form-label text-muted font-bold">Numele Nou</label>
+              <input
+                type="text"
+                id="input-new-fullname"
+                class="input-full"
+                required
+              />
+            </div>
+            <div class="form-group mb-15">
+              <label class="form-label text-muted font-bold"
+                >Parola Curentă (pentru securitate)</label
+              >
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="input-name-password"
+                  class="input-full"
+                  required
+                />
+                <i class="fa-solid fa-eye password-toggle-icon toggle-pw"></i>
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="btn-primary btn-full"
+              style="padding: 10px; border: none; background-color: #3498db"
+            >
+              <i class="fa-solid fa-save"></i> Salvează Numele
+            </button>
+          </form>
+        </div>
+
+        <div class="settings-card">
+          <h3>
+            <i class="fa-solid fa-envelope text-warning"></i> Actualizare Email
+          </h3>
+          <form id="form-update-email">
+            <div class="form-group mb-10">
+              <label class="form-label text-muted font-bold"
+                >Noua Adresă de Email</label
+              >
+              <input
+                type="email"
+                id="input-new-email"
+                class="input-full"
+                required
+              />
+            </div>
+            <div class="form-group mb-10">
+              <label class="form-label text-muted font-bold"
+                >Confirmă Adresa</label
+              >
+              <input
+                type="email"
+                id="input-confirm-email"
+                class="input-full"
+                required
+              />
+            </div>
+            <div class="form-group mb-15">
+              <label class="form-label text-muted font-bold"
+                >Parola Curentă (pentru securitate)</label
+              >
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="input-email-password"
+                  class="input-full"
+                  required
+                />
+                <i class="fa-solid fa-eye password-toggle-icon toggle-pw"></i>
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="btn-primary btn-full"
+              style="padding: 10px; border: none; background-color: #f39c12"
+            >
+              <i class="fa-solid fa-save"></i> Salvează Email-ul
+            </button>
+          </form>
+        </div>
+
+        <div class="settings-card">
+          <h3><i class="fa-solid fa-key text-error"></i> Schimbă Parola</h3>
+          <form id="form-change-password">
+            <div class="form-group mb-10">
+              <label class="form-label text-muted font-bold"
+                >Parola Veche</label
+              >
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="input-old-password"
+                  class="input-full"
+                  required
+                />
+                <i class="fa-solid fa-eye password-toggle-icon toggle-pw"></i>
+              </div>
+            </div>
+
+            <div
+              style="
+                height: 1px;
+                background: var(--border-color);
+                margin: 15px 0;
+              "
+            ></div>
+
+            <div class="form-group mb-10">
+              <label class="form-label text-muted font-bold">Noua Parolă</label>
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="input-new-password"
+                  class="input-full"
+                  required
+                  minlength="12"
+                />
+                <i class="fa-solid fa-eye password-toggle-icon toggle-pw"></i>
+              </div>
+            </div>
+
+            <div class="form-group mb-15">
+              <label class="form-label text-muted font-bold"
+                >Confirmă Noua Parolă</label
+              >
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="input-confirm-new-password"
+                  class="input-full"
+                  required
+                  minlength="12"
+                />
+                <i class="fa-solid fa-eye password-toggle-icon toggle-pw"></i>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn-primary btn-full"
+              style="
+                padding: 10px;
+                border: none;
+                background-color: #dc3545;
+                color: white;
+              "
+            >
+              <i class="fa-solid fa-shield-halved"></i> Actualizează Parola
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/admin/my-account.js"></script>
+  </body>
+</html>
