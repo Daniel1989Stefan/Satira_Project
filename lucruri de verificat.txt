@@ -2,3 +2,15 @@ Un detaliu important pentru PASUL URMĂTOR (după ce e Live):
 M-am uitat pe lista ta de variabile și am văzut că ai acolo CORS_ORIGIN și FRONTEND_URL. Acestea au probabil valorile tale vechi de pe calculator (gen http://localhost:5500).
 
 Nu este nicio problemă acum, dar ține minte acest lucru: după ce urcăm și frontend-ul pe GitHub Pages și primim link-ul lui (de ex. https://daniel1989stefan.github.io/...), va trebui să ne întoarcem o singură dată pe această pagină de la Render (la secțiunea Environment) ca să înlocuim acel localhost cu link-ul noului tău site. Dacă nu facem asta, serverul va bloca cererile de pe site din motive de securitate (CORS).
+
+
+
+
+render: ==> Available at your primary URL https://satira-backend-api.onrender.com
+
+
+// ÎN LOC DE:
+// const API_BASE_URL = process.env.API_BASE_URL; 
+
+// PUNE REALA ADRESĂ (CEA DE PE RENDER):
+const API_BASE_URL = "https://satira-backend-api.onrender.com";
