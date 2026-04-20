@@ -7,6 +7,7 @@ import { getCoAdminCookiesOptions } from "../utils/cookies.js";
 import { sendEmail, changeCoAdminPassword } from "../utils/mail.js";
 import * as crypto from "node:crypto";
 import { ensureActiveAccount } from "../utils/deactivation.js";
+import { OAuth2Client } from "google-auth-library";
 
 ///---Generate Co-Admin Token---///
 const generateCoAdminAccessAndRefreshToken = async (userId) => {
@@ -79,7 +80,38 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 ///---Co-Admin Login---///
 const coAdminLogin = asyncHandler(async (req, res) => {
-  const { email, loginPassword } = req.body;
+  const { email, loginPassword, recaptchaToken } = req.body;
+
+  if (!email) {
+    throw new ApiError(400, "Adresa de e-mail este obligatorie.");
+  }
+
+  // VALIDARE RECAPTCHA
+  if (!recaptchaToken) {
+    throw new ApiError(
+      400,
+      "Validarea anti-robot (reCAPTCHA) este obligatorie.",
+    );
+  }
+
+  const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+  const googleResponse = await fetch(verifyUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+  });
+
+  const googleData = await googleResponse.json();
+
+  if (!googleData.success) {
+    throw new ApiError(
+      400,
+      "Validarea reCAPTCHA a eșuat. Te rog să reîncerci.",
+    );
+  }
+  // SFÂRȘIT VALIDARE RECAPTCHA
 
   const normalizedEmail = String(email || "")
     .trim()

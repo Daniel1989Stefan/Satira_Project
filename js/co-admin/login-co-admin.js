@@ -36,6 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("email").value.trim();
     const password = passwordInput.value;
 
+    const recaptchaToken = grecaptcha.getResponse();
+
+    if (!recaptchaToken) {
+      messageBox.innerHTML =
+        "<span class='text-error'>❌ Te rugăm să bifezi căsuța 'Nu sunt robot'!</span>";
+      return;
+    }
+
     try {
       btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Se autentifică...`;
       btnSubmit.disabled = true;
@@ -45,7 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetchAPI("/co-admin/login", {
         method: "POST",
         credentials: "include",
-        body: JSON.stringify({ email: email, loginPassword: password }),
+        body: JSON.stringify({
+          email: email,
+          loginPassword: password,
+          recaptchaToken,
+        }),
       });
 
       console.log("✅ Răspuns primit cu succes de la server!", response);
@@ -62,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "co-admin-dashboard.html";
       }, 1500);
     } catch (error) {
+      grecaptcha.reset();
       console.error("❌ Eroare la autentificare:", error);
 
       messageBox.textContent = `❌ ${error.message}`;

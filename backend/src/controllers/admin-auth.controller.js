@@ -11,6 +11,7 @@ import {
 } from "../utils/mail.js";
 import * as crypto from "node:crypto";
 import mongoose from "mongoose";
+import { OAuth2Client } from "google-auth-library";
 
 ///---Genereate Admin Token---///
 const generateAdminAccessAndRefreshTooken = async (userId) => {
@@ -91,7 +92,38 @@ const createAdminAccount = asyncHandler(async (req, res) => {
 
 ///---Admin Login---///
 const adminLogin = asyncHandler(async (req, res) => {
-  const { email, loginPassword } = req.body;
+  const { email, loginPassword, recaptchaToken } = req.body;
+
+  if (!email) {
+    throw new ApiError(400, "Adresa de e-mail este obligatorie.");
+  }
+
+  // VALIDARE RECAPTCHA
+  if (!recaptchaToken) {
+    throw new ApiError(
+      400,
+      "Validarea anti-robot (reCAPTCHA) este obligatorie.",
+    );
+  }
+
+  const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+  const googleResponse = await fetch(verifyUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+  });
+
+  const googleData = await googleResponse.json();
+
+  if (!googleData.success) {
+    throw new ApiError(
+      400,
+      "Validarea reCAPTCHA a eșuat. Te rog să reîncerci.",
+    );
+  }
+  // SFÂRȘIT VALIDARE RECAPTCHA
 
   const admin = await User.findOne({ email });
   if (!admin) {

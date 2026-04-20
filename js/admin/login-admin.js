@@ -55,10 +55,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = emailInput ? emailInput.value.trim() : "";
       const password = passwordInput ? passwordInput.value : "";
 
+      const recaptchaToken = grecaptcha.getResponse();
+
+      if (!recaptchaToken) {
+        messageBox.innerHTML =
+          "<span class='text-error'>❌ Te rugăm să bifezi căsuța 'Nu sunt robot'!</span>";
+        return;
+      }
+
       try {
         const payload = {
           email: email,
           loginPassword: password,
+          recaptchaToken,
         };
 
         const response = await fetchAPI("/admin/login", {
@@ -89,6 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = "admin-dashboard.html";
         }, 1500);
       } catch (error) {
+        grecaptcha.reset();
         showMessage(
           `<span class='text-error'>❌ ${error.message}</span>`,
           true,
