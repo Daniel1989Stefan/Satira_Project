@@ -1551,6 +1551,11 @@ body {
   }
 }
 
+/* =========================================
+   LOGICA PENTRU ICONIȚELE DE DARK/LIGHT MODE
+   ========================================= */
+
+/* Baza: Toate iconițele au aceeași dimensiune și tranziție */
 .icon-zi,
 .icon-noapte {
   height: 32px;
@@ -1558,13 +1563,33 @@ body {
   transition: transform 0.2s ease;
 }
 
+/* --- 1. Logica de Temă (Zi vs Noapte) --- */
+/* Modul Default (Light): Ascundem iconițele de noapte */
 .icon-noapte {
-  display: none !important;
+  display: none;
 }
-
+/* Modul Dark: Ascundem iconițele de zi și le arătăm pe cele de noapte */
 [data-theme="dark"] .icon-zi {
-  display: none !important;
+  display: none;
 }
 [data-theme="dark"] .icon-noapte {
-  display: block !important;
+  display: block;
+}
+
+/* --- 2. Logica de Dispozitiv (Mobil vs PC/Tableta) --- */
+
+/* Pentru Mobil (lățime maximă 650px) */
+@media screen and (max-width: 650px) {
+  /* Ascundem FORȚAT iconițele de desktop */
+  .icon-desktop {
+    display: none !important;
+  }
+}
+
+/* Pentru Tabletă și PC (lățime de la 651px în sus) */
+@media screen and (min-width: 651px) {
+  /* Ascundem FORȚAT iconițele de mobil */
+  .icon-mobil {
+    display: none !important;
+  }
 }
