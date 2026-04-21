@@ -677,14 +677,14 @@ const updateEmail = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  if (!process.env.API_BASE_URL) {
+  if (!process.env.FRONTEND_URL) {
     throw new ApiError(
       500,
-      "Nu s-a putut stabili conexiunea cu serverul de date. Te rugăm să încerci mai târziu",
+      "Eroare internă de server. Aplicația nu este configurată corect.",
     );
   }
 
-  const verificationUrl = `${process.env.API_BASE_URL}/user/verify-email/${unhashedToken}`;
+  const verificationUrl = `${process.env.FRONTEND_URL}/pages/user/verify.html?token=${unhashedToken}`;
   await sendEmail({
     email: user.email,
     subject: "Please verify your email",
