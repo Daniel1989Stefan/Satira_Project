@@ -404,7 +404,7 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
     subject: "Password reset request",
     mailgenContent: forgotPasswordMailgenContent(
       admin.fullname,
-      `${process.env.ADMIN_FORGOT_PASSWORD_REDIRECT_URL}?token=${unhashedToken}`,
+      `${process.env.ADMIN_FORGOT_PASSWORD_REDIRECT_URL}${unhashedToken}`,
     ),
   });
 
