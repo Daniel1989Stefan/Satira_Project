@@ -59,7 +59,6 @@ const deleteFromCloudflare = async (fileUrl) => {
 
     // Trimitem comanda către Cloudflare să șteargă fișierul definitiv
     await s3Client.send(new DeleteObjectCommand(deleteParams));
-    console.log(`🗑️ Fișier șters definitiv de pe Cloudflare: ${fileName}`);
   } catch (error) {
     console.error("Eroare la ștergerea de pe Cloudflare:", error);
   }

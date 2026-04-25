@@ -203,17 +203,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     contactContainer.innerHTML = contactHTML;
   }
 
-  //CREAREA BANNER-ULUI CU TEXT DINAMIC
+  // CREAREA BANNER-ULUI CU TEXT DINAMIC ȘI T&C IMPLICIT
   const createCookieBanner = () => {
+    // Logica pentru a construi corect calea către legal.html (dacă suntem în root sau în subfoldere)
+    const isSubfolder = window.location.pathname.includes("/pages/");
+    const legalBasePath = isSubfolder ? "../legal.html" : "pages/legal.html";
+
     const bannerHTML = `
-      <div id="cookie-consent-banner">
+      <div id="cookie-consent-banner" class="cookie-banner-container">
         <div class="cookie-content">
           <div class="cookie-text">
             <p><strong>Atenție!</strong> 🕵️‍♂️ ${globalSettings.cookieText}</p>
+            <p class="cookie-legal-notice">
+              Prin apăsarea butonului "Acceptă toate", ești de acord cu utilizarea cookie-urilor și accepți 
+              <a href="${legalBasePath}?doc=tc" target="_blank">Termenii și Condițiile</a>, luând la cunoștință 
+              <a href="${legalBasePath}?doc=privacy" target="_blank">Politica de Confidențialitate</a>.
+            </p>
           </div>
           <div class="cookie-buttons">
             <button id="btn-refuse-cookies" class="btn-cookie btn-cookie-refuse">Refuz</button>
-            <button id="btn-accept-cookies" class="btn-cookie btn-cookie-accept">Accept</button>
+            <button id="btn-accept-cookies" class="btn-cookie btn-cookie-accept">Acceptă toate</button>
           </div>
         </div>
       </div>
@@ -222,6 +231,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   // LOGICA DE ANALYTICS
+  // (Functia de generare ID aleator, in caz ca nu o aveai definita global)
+  const generateVisitorId = () => {
+    return (
+      "vis_" + Math.random().toString(36).substr(2, 9) + Date.now().toString(36)
+    );
+  };
+
   const sendVisitToBackend = async (visitorId) => {
     try {
       await fetch(`${API_BASE_URL}/analytics/visit`, {
@@ -256,30 +272,33 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       sendVisitToBackend(visitorId);
     } else if (consent === "false") {
+      // Userul a refuzat, nu facem nimic in plus
     } else {
       createCookieBanner();
 
       setTimeout(() => {
         const banner = document.getElementById("cookie-consent-banner");
-        banner.classList.add("show");
+        if (banner) banner.classList.add("show");
 
-        document
-          .getElementById("btn-accept-cookies")
-          .addEventListener("click", () => {
+        const btnAccept = document.getElementById("btn-accept-cookies");
+        if (btnAccept) {
+          btnAccept.addEventListener("click", () => {
             localStorage.setItem("analytics_consent", "true");
             const newVisitorId = generateVisitorId();
             localStorage.setItem("visitor_id", newVisitorId);
             banner.classList.remove("show");
             sendVisitToBackend(newVisitorId);
           });
+        }
 
-        document
-          .getElementById("btn-refuse-cookies")
-          .addEventListener("click", () => {
+        const btnRefuse = document.getElementById("btn-refuse-cookies");
+        if (btnRefuse) {
+          btnRefuse.addEventListener("click", () => {
             localStorage.setItem("analytics_consent", "false");
             banner.classList.remove("show");
             sendRefusalToBackend();
           });
+        }
       }, 500);
     }
   };

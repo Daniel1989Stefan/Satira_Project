@@ -3,15 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Verificare Email | Ziarul Mincinos</title>
-    <meta name="robots" content="noindex, nofollow" />
-    <link rel="stylesheet" href="../../css/style.css" />
+    <title>Documente Legale | Ziarul cu Minciuni</title>
+    <link rel="stylesheet" href="../css/style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
   </head>
-  <body class="login-page">
+  <body class="legal-page">
     <header class="navbar">
       <div class="navbar-top">
         <div class="nav-container-inner">
@@ -33,14 +32,14 @@
           </div>
 
           <div class="nav-center">
-            <a href="../../index.html">
+            <a href="../index.html">
               <img
-                src="../../img/logo.svg"
+                src="../img/logo.svg"
                 alt="Satira Logo"
                 class="site-logo logo-day"
               />
               <img
-                src="../../img/logo-dark.svg"
+                src="../img/logo-dark.svg"
                 alt="Satira Logo"
                 class="site-logo logo-night"
               />
@@ -51,27 +50,36 @@
             <div class="nav-right-actions">
               <button id="theme-toggle" class="theme-toggle-btn">
                 <img
-                  src="../../img/light-mode.svg"
+                  src="../img/light-mode.svg"
                   class="icon-zi icon-desktop"
                   alt="Mod Zi"
                 />
                 <img
-                  src="../../img/dark-mode.svg"
+                  src="../img/dark-mode.svg"
                   class="icon-noapte icon-desktop"
                   alt="Mod Noapte"
                 />
                 <img
-                  src="../../img/light-mode-mobil.svg"
+                  src="../img/light-mode-mobil.svg"
                   alt="Zi Mobil"
                   class="icon-zi icon-mobil"
                 />
                 <img
-                  src="../../img/dark-mode-mobil.svg"
+                  src="../img/dark-mode-mobil.svg"
                   alt="Noapte Mobil"
                   class="icon-noapte icon-mobil"
                 />
               </button>
-              <div id="user-menu-top"></div>
+
+              <div id="user-menu-top">
+                <a
+                  href="../index.html"
+                  id="special-action-btn"
+                  class="nav-btn-special"
+                >
+                  <i class="fa-solid fa-house"></i> <span>Înapoi la Site</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -87,7 +95,7 @@
         </button>
       </div>
       <div class="sidebar-content" id="sidebar-content-area">
-        <a href="../../index.html" class="sidebar-item font-bold"
+        <a href="../index.html" class="sidebar-item font-bold"
           >🏠 Toate Postările</a
         >
         <button
@@ -98,38 +106,25 @@
           <span id="toggle-icon" class="toggle-icon">▼</span>
         </button>
         <div id="sidebar-categories-list"></div>
-        <div
-          id="sidebar-auth-links"
-          style="
-            margin-top: 15px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 5px;
-          "
-        ></div>
+        <div class="sidebar-auth-links-container">
+          <a href="../index.html" class="sidebar-item font-bold border-none"
+            ><i class="fa-solid fa-house"></i> Înapoi la Site</a
+          >
+        </div>
       </div>
     </nav>
 
-    <div
-      class="login-box text-center"
-      style="margin-top: 80px; margin-bottom: 80px"
-    >
-      <h2>Verificare Cont</h2>
-
-      <div id="verification-message" class="mt-20 mb-20 text-md font-bold">
-        <span class="text-info"
-          >Se validează contul tău... Te rugăm să aștepți.</span
-        >
+    <main class="legal-content-wrapper">
+      <div class="legal-card">
+        <h1 id="legal-title" class="legal-title">Se încarcă...</h1>
+        <div id="legal-body" class="legal-body-text">
+          <p>
+            <i class="fa-solid fa-spinner fa-spin"></i> Preluăm datele din
+            server...
+          </p>
+        </div>
       </div>
-
-      <div id="action-buttons" class="mt-20 d-none">
-        <a
-          href="login.html"
-          class="btn-primary btn-full d-inline-block text-center"
-          style="text-decoration: none; padding: 12px; box-sizing: border-box"
-          >Mergi la Login</a
-        >
-      </div>
-    </div>
+    </main>
 
     <footer class="site-footer">
       <div class="footer-content">
@@ -140,28 +135,14 @@
 
         <div class="footer-section footer-center">
           <h3 id="footer-support-title">Susține Proiectul</h3>
-          <p id="footer-support-desc" style="margin-bottom: 15px">
-            Se încarcă...
-          </p>
+          <p id="footer-support-desc" class="mb-15">Se încarcă...</p>
 
           <a
             href="https://www.buymeacoffee.com/stefan.danca.dev"
             target="_blank"
-            style="
-              display: inline-block;
-              background-color: #ffdd00 !important;
-              color: #000000 !important;
-              padding: 10px 20px;
-              border-radius: 8px;
-              font-weight: bold;
-              text-decoration: none;
-              font-size: 14px;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-              transition: transform 0.2s;
-            "
+            class="bmac-footer-btn"
           >
-            <i class="fa-solid fa-mug-hot" style="margin-right: 8px"></i> Buy me
-            a Coffee
+            <i class="fa-solid fa-mug-hot bmac-icon"></i> Buy me a Coffee
           </a>
         </div>
 
@@ -174,13 +155,12 @@
       </div>
 
       <div class="footer-bottom" id="footer-copyright-text">
-        &copy; 2026 Ziarul Mincinos. Toate drepturile rezervate.
+        &copy; 2026 Ziarul cu Minciuni. Toate drepturile rezervate.
       </div>
     </footer>
 
-    <script src="../../js/api.js"></script>
-    <script src="../../js/user/posts.js"></script>
-    <script src="../../js/user/verify.js"></script>
-    <script src="../../js/ui.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/legal.js"></script>
   </body>
 </html>

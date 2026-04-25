@@ -17,11 +17,14 @@
 //npm uninstall cloudinary
 //npm install @aws-sdk/client-s3
 // npm install google-auth-library
+//npm install node-cron
 
 import "dotenv/config"; //face legătura cu fișierul .env
 
 import app from "./app.js";
 import connectDB from "./db/database.js";
+import { startGDPRCleanupJob } from "./cron/gdpr-cleanup.js";
+import { startDataExportJob } from "./cron/data-export.js";
 
 const port = process.env.PORT;
 
@@ -30,6 +33,10 @@ connectDB()
     app.listen(port, () => {
       console.log(`The server is running on port ${port}`);
     });
+    startGDPRCleanupJob(); //pt eliminare conturi dupa 30 zile
+    // console.log("🕒 Cron jobs-urile au fost inițializate.");
+
+    startDataExportJob(); //pt export data pt userii care au facut cererea
   })
   .catch((error) => {
     console.log(`MongoDB connection error`, error);

@@ -18,11 +18,13 @@ import {
   coAdminList,
   coAdmin,
   getAllUsers,
-  disableAccount,
+  disableUser,
   disabledUsersList,
   disabledCoAdminList,
   reactivateAccount,
   updatePermissions,
+  disableCoAdmin,
+  reactivateCoAdmin,
 } from "../controllers/admin-auth.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import {
@@ -110,6 +112,8 @@ router.post(
   createCoAdmin,
 );
 
+router.patch("/disable-co-admin", adminVerifyJWT, disableCoAdmin);
+
 router.post("/logout", adminVerifyJWT, adminLogout);
 
 router.post("/current-user", adminVerifyJWT, getCurrentUser);
@@ -169,11 +173,11 @@ router.get("/all-co-admins", adminVerifyJWT, coAdminList);
 router.get("/co-admin/:id", adminVerifyJWT, coAdmin);
 
 router.patch(
-  "/disable-account",
+  "/disable-user",
   adminVerifyJWT,
   disableValidator(),
   validate,
-  disableAccount,
+  disableUser,
 );
 
 router.get("/all-users", adminVerifyJWT, getAllUsers);
@@ -183,11 +187,11 @@ router.get("/disabled-users-list", adminVerifyJWT, disabledUsersList);
 router.get("/disabled-co-admin-list", adminVerifyJWT, disabledCoAdminList);
 
 router.patch(
-  "/reactivate-account",
+  "/reactivate-co-admin",
   adminVerifyJWT,
   reactivateAccountValidator(),
   validate,
-  reactivateAccount,
+  reactivateCoAdmin,
 );
 
 router.patch(

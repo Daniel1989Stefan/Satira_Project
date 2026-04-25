@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // ==========================================
+  // LOGICA PENTRU LOGIN (EMAIL + PASSWORD)
+  // ==========================================
   const loginForm = document.getElementById("login-form");
 
   if (loginForm) {
@@ -63,32 +66,46 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
-  //  LOGICA PENTRU REGISTER
+  //  LOGICA PENTRU REGISTER (EMAIL + PASSWORD)
   // ==========================================
   const registerForm = document.getElementById("register-form");
+  const agreeTermsCheckbox = document.getElementById("agree-terms");
+  const termsContainer = document.getElementById("terms-container");
 
   if (registerForm) {
-    const toggleIconRegister = document.getElementById("toggle-password-icon");
     const passField = document.getElementById("password");
     const confirmPassField = document.getElementById("confirmPassword");
+    const toggleBothPasswords = document.getElementById(
+      "toggle-both-passwords",
+    );
     const messageBox = document.getElementById("register-message-box");
 
-    if (toggleIconRegister && passField && confirmPassField) {
-      toggleIconRegister.addEventListener("click", function () {
-        if (passField.type === "password") {
-          passField.type = "text";
-          confirmPassField.type = "text";
-          this.classList.replace("fa-eye", "fa-eye-slash");
-        } else {
-          passField.type = "password";
-          confirmPassField.type = "password";
-          this.classList.replace("fa-eye-slash", "fa-eye");
-        }
+    // Logica NOUĂ pentru afișarea ambelor parole folosind Checkbox-ul
+    if (toggleBothPasswords && passField && confirmPassField) {
+      toggleBothPasswords.addEventListener("change", function () {
+        const inputType = this.checked ? "text" : "password";
+        passField.type = inputType;
+        confirmPassField.type = inputType;
       });
     }
 
     registerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      // Verificare Checkbox T&C
+      if (!agreeTermsCheckbox.checked) {
+        messageBox.innerHTML =
+          "<span class='text-error'>❌ Trebuie să accepți Termenii și Condițiile pentru a continua.</span>";
+
+        // Adăugăm clasa CSS pentru a evidenția eroarea
+        if (termsContainer) {
+          termsContainer.classList.add("terms-error-highlight");
+          setTimeout(() => {
+            termsContainer.classList.remove("terms-error-highlight");
+          }, 2000);
+        }
+        return;
+      }
 
       const nickname = document.getElementById("nickname").value.trim();
       const email = document.getElementById("email").value.trim();
@@ -178,12 +195,19 @@ document.addEventListener("DOMContentLoaded", () => {
       googleMessageBox.innerHTML =
         "<span class='text-info'>Se procesează conectarea cu Google... ⏳</span>";
 
+      // IMPORTANT: Determinăm dacă suntem pe pagina de Register sau Login
+      // Asta îi va spune backend-ului dacă are voie să creeze un cont nou sau nu.
+      const currentIntent = registerForm ? "register" : "login";
+
       try {
         const apiResponse = await fetchAPI("/user/auth/google", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ credential: response.credential }),
+          body: JSON.stringify({
+            credential: response.credential,
+            intent: currentIntent, // <-- TRIMITEM INTENȚIA AICI
+          }),
         });
 
         googleMessageBox.innerHTML =
@@ -207,15 +231,57 @@ document.addEventListener("DOMContentLoaded", () => {
           callback: handleGoogleResponse,
         });
 
-        google.accounts.id.renderButton(
-          document.getElementById("google-btn-container"),
-          {
-            theme: "outline",
-            size: "large",
-            text: "continue_with",
-            width: 300,
-          },
+        const googleBtnContainer = document.getElementById(
+          "google-btn-container",
         );
+        google.accounts.id.renderButton(googleBtnContainer, {
+          theme: "outline",
+          size: "large",
+          text: "continue_with",
+          width: 300,
+        });
+
+        // Dacă suntem pe pagina de Register, aplicăm masca pentru T&C
+        if (registerForm && agreeTermsCheckbox) {
+          googleBtnContainer.classList.add("position-relative");
+
+          const overlay = document.createElement("div");
+          overlay.classList.add("google-btn-overlay");
+          googleBtnContainer.appendChild(overlay);
+
+          overlay.addEventListener("click", (e) => {
+            if (!agreeTermsCheckbox.checked) {
+              e.stopPropagation();
+              googleMessageBox.innerHTML =
+                "<span class='text-error'>❌ Trebuie să accepți Termenii și Condițiile înainte de a continua cu Google.</span>";
+
+              if (termsContainer) {
+                termsContainer.classList.add("terms-error-highlight");
+                setTimeout(() => {
+                  termsContainer.classList.remove("terms-error-highlight");
+                }, 2000);
+              }
+            } else {
+              overlay.classList.add("d-none");
+
+              const realButton =
+                googleBtnContainer.querySelector('div[role="button"]');
+              if (realButton) realButton.click();
+
+              setTimeout(() => {
+                overlay.classList.remove("d-none");
+              }, 500);
+            }
+          });
+
+          agreeTermsCheckbox.addEventListener("change", () => {
+            if (agreeTermsCheckbox.checked) {
+              overlay.classList.add("d-none");
+            } else {
+              overlay.classList.remove("d-none");
+            }
+          });
+        }
       } else {
         console.error("Scriptul Google nu s-a încărcat la timp.");
       }

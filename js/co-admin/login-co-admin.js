@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("🟢 Scriptul login-co-admin.js s-a încărcat cu succes!");
-
   const loginForm = document.getElementById("form-login-coadmin");
   const messageBox = document.getElementById("login-message-box");
 
@@ -27,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    console.log("🟡 Butonul a fost apăsat. Am oprit refresh-ul paginii.");
 
     messageBox.textContent = "";
     messageBox.style.display = "none";
@@ -48,8 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
       btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Se autentifică...`;
       btnSubmit.disabled = true;
 
-      console.log("📡 Trimitem datele către backend: /co-admin/login");
-
       const response = await fetchAPI("/co-admin/login", {
         method: "POST",
         credentials: "include",
@@ -59,8 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
           recaptchaToken,
         }),
       });
-
-      console.log("✅ Răspuns primit cu succes de la server!", response);
 
       messageBox.textContent = "✅ Autentificare reușită! Redirecționare...";
       messageBox.style.backgroundColor = "#d4edda";
@@ -102,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         credentials: "include",
       });
-      console.log("🔓 Ești deja logat! Te redirecționez spre dashboard...");
 
       localStorage.setItem("satira_role", "co-admin");
 

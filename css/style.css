@@ -640,9 +640,12 @@ body {
 }
 
 .profile-page-container {
-  max-width: 900px;
-  margin: 40px auto;
+  max-width: 900px !important;
+  margin: 40px auto !important;
   padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
 }
 
 .profile-page-header {
@@ -667,6 +670,8 @@ body {
   align-items: center;
   gap: 20px;
   margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .profile-avatar-circle {
@@ -700,6 +705,8 @@ body {
   grid-template-columns: 1fr;
   gap: 20px;
   margin-bottom: 30px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .profile-input-box {
@@ -730,21 +737,9 @@ body {
 .profile-actions-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
   max-width: 400px;
-}
-
-.profile-btn {
-  display: block;
-  text-align: center;
-  padding: 12px;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: bold;
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  background: var(--bg-card);
-  transition: all 0.2s;
+  margin: 0;
 }
 
 .profile-btn:hover {
@@ -760,6 +755,60 @@ body {
 .profile-btn.danger:hover {
   background: #dc3545;
   color: white;
+}
+
+/* ========================================================
+   CARD LINK-URI UTILE (PROFIL)
+   ======================================================== */
+
+.profile-links-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.profile-links-title {
+  color: var(--text-main);
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 10px;
+}
+
+.profile-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-links-list li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition:
+    color 0.2s ease,
+    padding-left 0.2s ease;
+}
+
+.profile-links-list li a i {
+  color: var(--btn-special);
+  width: 16px;
+  text-align: center;
+}
+
+.profile-links-list li a:hover {
+  color: var(--text-main);
+  font-weight: bold;
+  padding-left: 5px;
 }
 
 .badge {
@@ -1422,7 +1471,6 @@ body {
     flex: 0 0 60%;
   }
 }
-
 #cookie-consent-banner {
   position: fixed;
   bottom: -150px;
@@ -1501,6 +1549,29 @@ body {
   .cookie-text {
     flex: 1;
   }
+}
+
+/* ========================================================
+   TEXT LEGAL BANNER COOKIES 
+   ======================================================== */
+
+.cookie-legal-notice {
+  font-size: 12px !important;
+  margin-top: 8px !important;
+  line-height: 1.4;
+  color: var(--text-main);
+}
+
+.cookie-legal-notice a {
+  color: var(--text-main);
+  font-weight: bold;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.cookie-legal-notice a:hover {
+  text-decoration: underline;
+  opacity: 0.6;
 }
 
 .nav-container-inner {
@@ -1591,5 +1662,448 @@ body {
   /* Ascundem FORȚAT iconițele de mobil */
   .icon-mobil {
     display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Pagina Ștergere Cont (GDPR)
+   ========================================================================== */
+
+.delete-account-box {
+  margin-top: 80px;
+  margin-bottom: 80px;
+  border: 2px solid #dc3545;
+}
+
+.text-danger-title {
+  color: #dc3545;
+}
+
+.warning-banner-gdpr {
+  background-color: rgba(220, 53, 69, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  border-left: 4px solid #dc3545;
+}
+
+.warning-banner-gdpr p {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.warning-banner-gdpr ul {
+  font-size: 13px;
+  padding-left: 20px;
+}
+
+.action-buttons-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.btn-cancel-outline {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancel-outline:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.btn-danger-solid {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 50%;
+  transition: opacity 0.2s ease;
+}
+
+.btn-danger-solid:hover {
+  opacity: 0.9;
+}
+
+/* Buton Buy Me a Coffee (Subsol) */
+.footer-bmac-btn {
+  display: inline-block;
+  background-color: #ffdd00 !important;
+  color: #000000 !important;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.footer-bmac-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* de vazut daca e ok */
+/* ========================================================
+   STILURI PENTRU BUTOANELE DIN PROFIL
+   (Ajustate pentru a suporta și tag-ul <button>)
+   ======================================================== */
+
+/* Hover pentru butoanele care NU sunt dezactivate */
+.profile-btn:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.03);
+  transform: translateY(-1px);
+}
+
+.profile-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--bg-color);
+  transform: none;
+}
+
+.profile-btn.danger {
+  color: #dc3545;
+  border-color: rgba(220, 53, 69, 0.3);
+}
+
+.profile-btn.danger:hover:not(:disabled) {
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+/* ========================================================
+   STILURI PENTRU MESAJELE DE STATUS (GDPR Export)
+   ======================================================== */
+
+.status-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  animation: fadeIn 0.3s ease;
+}
+
+.status-message.info {
+  background-color: rgba(255, 193, 7, 0.1);
+  border: 1px solid #ffeeba;
+  color: #856404;
+}
+
+/* Când cererea a fost trimisă cu succes */
+.status-message.success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+/* Când a apărut o eroare */
+.status-message.error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+/* Animație de apariție lină pentru mesaje */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================
+   STILURI EXTRA PENTRU CURĂȚENIA FĂCUTĂ ANTERIOR
+   (Dacă le aveai deja, poți să le ignori)
+   ======================================================== */
+
+.btn-logout {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.resend-container {
+  text-align: left;
+  margin-top: 10px;
+}
+
+.resend-btn {
+  background: none;
+  border: none;
+  color: var(--btn-special); /* sau o culoare de link */
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.resend-message {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.bmac-footer-btn {
+  display: inline-block;
+  background-color: #ffdd00 !important;
+  color: #000000 !important;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.bmac-footer-btn:hover {
+  transform: translateY(-2px);
+}
+
+.bmac-icon {
+  margin-right: 8px;
+}
+
+.d-none {
+  display: none !important;
+}
+
+/* ========================================================
+   CLASE UTILITARE ȘI SPECIFICE PENTRU REGISTER/LOGIN
+   ======================================================== */
+
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.position-relative {
+  position: relative !important;
+}
+
+.text-accent {
+  color: var(--btn-special) !important;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.terms-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.terms-checkbox {
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.terms-label {
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+/* Clasa pentru masca invizibilă peste butonul Google */
+.google-btn-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* Clasa pentru evidențierea erorii la neacceptarea T&C */
+.terms-error-highlight {
+  border: 1px solid red !important;
+  padding: 5px !important;
+  border-radius: 5px !important;
+  transition: all 0.3s ease;
+}
+
+.sidebar-auth-links-container {
+  margin-top: 15px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 5px;
+}
+
+.border-none {
+  border-bottom: none !important;
+}
+/*END*/
+
+/* ========================================================
+   STILIZARE CHECKBOX-URI FORMULAR (Register/Login)
+   ======================================================== */
+
+.checkbox-container-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.custom-checkbox {
+  margin: 3px 0 0 0;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.terms-label {
+  line-height: 1.5;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* ========================================================
+   STILURI PROFIL (UNIFICATE ȘI CORECTATE)
+   ======================================================== */
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box; /* IMPORTANT PENTRU A REZOLVA BUTONUL MAI SCURT */
+  padding: 12px 20px;
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold; /* Preluat din prima definitie, se vede mai bine */
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-align: center; /* Pentru siguranță pe tag-urile a */
+}
+
+/* Stările de hover și disabled rămân aceleași */
+.profile-btn:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.03);
+  transform: translateY(-1px);
+}
+
+.profile-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--bg-color);
+  transform: none;
+}
+
+.profile-btn.danger {
+  color: #dc3545;
+  border-color: rgba(220, 53, 69, 0.3);
+}
+
+.profile-btn.danger:hover:not(:disabled) {
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+/* ========================================================
+   PAGINI LEGALE (T&C, Privacy, Cookies)
+   ======================================================== */
+
+.legal-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.legal-content-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.legal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.legal-title {
+  color: var(--text-main);
+  font-family: Georgia, serif;
+  font-size: 28px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 15px;
+  margin-top: 0;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.legal-body-text {
+  color: var(--text-main);
+  line-height: 1.6;
+  font-size: 15px;
+  white-space: pre-wrap;
+}
+
+.legal-body-text h3,
+.legal-body-text h4 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.legal-body-text a {
+  color: var(--btn-special);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.legal-body-text a:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+  .legal-card {
+    padding: 20px;
+  }
+  .legal-title {
+    font-size: 22px;
   }
 }

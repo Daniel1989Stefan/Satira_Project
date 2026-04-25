@@ -102,12 +102,7 @@ export const returnValues = (fields = []) => {
       .notEmpty()
       .withMessage("Reason is required")
       .isLength({ min: 3, max: 200 }),
-    autoDeactivate: body("autoDeactivate")
-      .trim()
-      .notEmpty()
-      .withMessage(
-        "Please confirm if you want to proceed with the deactivation",
-      ),
+
     confirmEmail: body("confirmEmail").trim().notEmpty(),
 
     permissions: body("permissions")

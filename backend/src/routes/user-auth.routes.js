@@ -14,6 +14,8 @@ import {
   changeNickname,
   autoDeactivateAccount,
   googleAuthLogin,
+  requestAccountDeletion,
+  requestDataExport,
 } from "../controllers/user-auth.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import { verifyJWT } from "../middlewares/user-jwt.auth.middleware.js";
@@ -25,7 +27,6 @@ import {
   userResetForgotPasswordValidator,
   changeEmailValidator,
   changeNicknameValidator,
-  autoDeactivationAccountValidator,
 } from "../validators/auth.validators.js";
 import {
   strictAuthLimiter, //5 incercari la fiecare 15 min
@@ -40,11 +41,15 @@ import {
   getUniqueCategories,
   toggleVotePost,
 } from "../controllers/post.controller.js";
+import { getSettings } from "../controllers/settings.controller.js";
 
 //Unsecure Routes:
+
+router.get("/settings", getSettings);
+
 router.post("/register", userRegisterValidator(), validate, registerUser); //checked
 
-router.post("/login", strictAuthLimiter, userLoginValidator(), validate, login); // de pus inapoi strictAuthLimiter,
+router.post("/login", strictAuthLimiter, userLoginValidator(), validate, login);
 
 router.route("/auth/google").post(googleAuthLogin);
 
@@ -114,14 +119,17 @@ router.patch(
   changeNickname,
 );
 
-router.patch(
-  "/auto-deactivate-account",
-  verifyJWT,
-  autoDeactivationAccountValidator(),
-  validate,
-  autoDeactivateAccount,
-);
+router.patch("/auto-deactivate-account", verifyJWT, autoDeactivateAccount);
 
 router.post("/:postId/vote", verifyJWT, toggleVotePost);
+
+router.patch(
+  "/request-account-deletion",
+  authLimiter,
+  verifyJWT,
+  requestAccountDeletion,
+);
+
+router.post("/request-data-export", verifyJWT, requestDataExport);
 
 export default router;

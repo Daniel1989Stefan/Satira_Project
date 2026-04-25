@@ -321,7 +321,6 @@ export const updatePost = asyncHandler(async (req, res) => {
   if (mediaToDelete.length > 0) {
     try {
       await Promise.all(mediaToDelete.map((url) => deleteFromCloudflare(url)));
-      console.log("Toate imaginile orfane au fost șterse de pe Cloudflare.");
     } catch (error) {
       console.error("Eroare la procesul de ștergere imagini multiple:", error);
     }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Verificare Email | Ziarul Mincinos</title>
+    <title>Ștergere Cont | Ziarul Mincinos</title>
     <meta name="robots" content="noindex, nofollow" />
     <link rel="stylesheet" href="../../css/style.css" />
     <link
@@ -71,7 +71,19 @@
                   class="icon-noapte icon-mobil"
                 />
               </button>
-              <div id="user-menu-top"></div>
+
+              <div id="user-menu-top">
+                <a href="profile.html" class="nav-btn-special">
+                  <i class="fa-solid fa-user"></i> <span>Contul Meu</span>
+                </a>
+                <button
+                  id="logout-btn"
+                  class="nav-btn-special btn-danger-solid"
+                >
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                  <span>Logout</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -98,37 +110,75 @@
           <span id="toggle-icon" class="toggle-icon">▼</span>
         </button>
         <div id="sidebar-categories-list"></div>
-        <div
-          id="sidebar-auth-links"
-          style="
-            margin-top: 15px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 5px;
-          "
-        ></div>
+        <div id="sidebar-auth-links" class="sidebar-auth-container"></div>
       </div>
     </nav>
 
-    <div
-      class="login-box text-center"
-      style="margin-top: 80px; margin-bottom: 80px"
-    >
-      <h2>Verificare Cont</h2>
+    <div class="login-box delete-account-box">
+      <h2 class="text-center mb-20 text-danger-title">
+        <i class="fa-solid fa-triangle-exclamation"></i> Ștergere Cont
+        Definitivă
+      </h2>
 
-      <div id="verification-message" class="mt-20 mb-20 text-md font-bold">
-        <span class="text-info"
-          >Se validează contul tău... Te rugăm să aștepți.</span
-        >
+      <div class="warning-banner-gdpr">
+        <p class="text-muted">
+          <strong>De reținut (Conform GDPR):</strong>
+        </p>
+        <ul class="text-muted">
+          <li>Profilul tău va fi ascuns imediat și vei fi deconectat.</li>
+          <li>
+            Datele tale vor intra într-o
+            <strong>perioadă de grație de 30 de zile</strong>.
+          </li>
+          <li>
+            Dacă te răzgândești, te poți reconecta în aceste 30 de zile pentru a
+            anula ștergerea.
+          </li>
+          <li>
+            După expirarea termenului, contul tău va fi
+            <strong>șters irevocabil</strong> din baza noastră de date.
+          </li>
+        </ul>
       </div>
 
-      <div id="action-buttons" class="mt-20 d-none">
-        <a
-          href="login.html"
-          class="btn-primary btn-full d-inline-block text-center"
-          style="text-decoration: none; padding: 12px; box-sizing: border-box"
-          >Mergi la Login</a
+      <form id="delete-account-form">
+        <label
+          for="delete-password"
+          class="form-label text-muted text-sm d-block mb-10"
+          >Confirmă Parola curentă pentru a continua</label
         >
-      </div>
+        <div class="input-icon-group">
+          <i class="fa-solid fa-lock icon-left"></i>
+          <input
+            type="password"
+            id="delete-password"
+            required
+            placeholder="••••••••"
+          />
+        </div>
+
+        <div class="checkbox-container mt-10 text-left">
+          <input type="checkbox" id="show-passwords" />
+          <label for="show-passwords" class="text-muted text-sm"
+            >Arată parola</label
+          >
+        </div>
+
+        <div id="delete-message-box" class="message-box mb-15 mt-15"></div>
+
+        <div class="action-buttons-row">
+          <button
+            type="button"
+            onclick="window.location.href = 'profile.html'"
+            class="btn-full btn-cancel-outline"
+          >
+            Anulează
+          </button>
+          <button type="submit" class="btn-full btn-danger-solid">
+            Șterge Contul
+          </button>
+        </div>
+      </form>
     </div>
 
     <footer class="site-footer">
@@ -140,28 +190,14 @@
 
         <div class="footer-section footer-center">
           <h3 id="footer-support-title">Susține Proiectul</h3>
-          <p id="footer-support-desc" style="margin-bottom: 15px">
-            Se încarcă...
-          </p>
+          <p id="footer-support-desc" class="mb-15">Se încarcă...</p>
 
           <a
             href="https://www.buymeacoffee.com/stefan.danca.dev"
             target="_blank"
-            style="
-              display: inline-block;
-              background-color: #ffdd00 !important;
-              color: #000000 !important;
-              padding: 10px 20px;
-              border-radius: 8px;
-              font-weight: bold;
-              text-decoration: none;
-              font-size: 14px;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-              transition: transform 0.2s;
-            "
+            class="footer-bmac-btn"
           >
-            <i class="fa-solid fa-mug-hot" style="margin-right: 8px"></i> Buy me
-            a Coffee
+            <i class="fa-solid fa-mug-hot"></i> Buy me a Coffee
           </a>
         </div>
 
@@ -179,8 +215,8 @@
     </footer>
 
     <script src="../../js/api.js"></script>
-    <script src="../../js/user/posts.js"></script>
-    <script src="../../js/user/verify.js"></script>
+    <script src="../../js/user/delete-account.js"></script>
     <script src="../../js/ui.js"></script>
+    <script src="../../js/user/posts.js"></script>
   </body>
 </html>

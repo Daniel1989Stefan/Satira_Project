@@ -14,9 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
       messageBox.innerHTML = htmlContent;
     } else if (isErrorFallback) {
       alert("❌ Eroare: " + rawErrorMsg);
-    } else {
-      console.log("Status Login:", rawErrorMsg || "Se încarcă...");
     }
+    // } else {
+    //   console.log("Status Login:", rawErrorMsg || "Se încarcă...");
+    // }
   };
 
   if (btnCheckDashboard) {

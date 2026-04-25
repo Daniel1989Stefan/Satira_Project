@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Creare Cont | Ziarul cu Minciuni</title>
+    <title>Creare Cont | Ziarul Mincinos</title>
     <link rel="stylesheet" href="../../css/style.css" />
     <link
       rel="stylesheet"
@@ -106,39 +106,26 @@
           <span id="toggle-icon" class="toggle-icon">▼</span>
         </button>
         <div id="sidebar-categories-list"></div>
-        <div
-          id="sidebar-auth-links"
-          style="
-            margin-top: 15px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 5px;
-          "
-        >
-          <a
-            href="../../index.html"
-            class="sidebar-item font-bold"
-            style="border-bottom: none"
+        <div id="sidebar-auth-links" class="sidebar-auth-links-container">
+          <a href="../../index.html" class="sidebar-item font-bold border-none"
             ><i class="fa-solid fa-house"></i> Înapoi la Site</a
           >
         </div>
       </div>
     </nav>
 
-    <div class="login-box" style="margin-top: 40px; margin-bottom: 40px">
+    <div class="login-box mt-20 mb-20">
       <h2 class="text-center mb-20">Creare Cont Nou</h2>
 
-      <div
-        id="google-btn-container"
-        class="mb-15"
-        style="display: flex; justify-content: center"
-      ></div>
+      <div id="google-btn-container" class="google-btn-wrapper mb-15"></div>
+
       <input
         type="hidden"
         id="g-client-id"
         value="5008049955-vdi1hb076r1hfbhl7ohoia0c6umpac51.apps.googleusercontent.com"
       />
 
-      <div class="text-center text-muted mb-15" style="font-size: 14px">
+      <div class="text-center text-muted mb-15 text-sm">
         <span>--------- SAU ---------</span>
       </div>
 
@@ -183,7 +170,6 @@
             required
             placeholder="••••••••"
           />
-          <i class="fa-regular fa-eye icon-eye" id="toggle-password-icon"></i>
         </div>
 
         <label
@@ -201,23 +187,55 @@
           />
         </div>
 
+        <div class="checkbox-container-vertical mb-20 mt-10">
+          <div class="checkbox-row">
+            <input
+              type="checkbox"
+              id="toggle-both-passwords"
+              class="custom-checkbox cursor-pointer"
+            />
+            <label
+              for="toggle-both-passwords"
+              class="text-sm text-muted cursor-pointer"
+              >Afișează ambele parole</label
+            >
+          </div>
+
+          <div id="terms-container" class="checkbox-row">
+            <input
+              type="checkbox"
+              id="agree-terms"
+              required
+              class="custom-checkbox cursor-pointer"
+            />
+            <label for="agree-terms" class="text-sm text-muted terms-label">
+              Am cel puțin 16 ani și sunt de acord cu
+              <a
+                href="../legal.html?doc=tc"
+                target="_blank"
+                class="link-primary font-bold"
+                >Termenii și Condițiile</a
+              >
+              și am citit
+              <a
+                href="../legal.html?doc=privacy"
+                target="_blank"
+                class="link-primary font-bold"
+                >Politica de Confidențialitate</a
+              >.
+            </label>
+          </div>
+        </div>
+
         <div id="register-message-box" class="message-box mb-15"></div>
 
         <button type="submit" class="btn-primary btn-full">
           Înregistrează-te
         </button>
 
-        <div
-          class="text-center mt-20"
-          style="font-size: 14px; color: var(--text-muted)"
-        >
+        <div class="text-center mt-20 text-sm text-muted">
           Ai deja cont?
-          <a
-            href="login.html"
-            class="link-primary font-bold"
-            style="color: var(--btn-special)"
-            >Autentifică-te</a
-          >
+          <a href="login.html" class="link-primary font-bold">Autentifică-te</a>
         </div>
       </form>
     </div>
@@ -231,28 +249,14 @@
 
         <div class="footer-section footer-center">
           <h3 id="footer-support-title">Susține Proiectul</h3>
-          <p id="footer-support-desc" style="margin-bottom: 15px">
-            Se încarcă...
-          </p>
+          <p id="footer-support-desc" class="mb-15">Se încarcă...</p>
 
           <a
             href="https://www.buymeacoffee.com/stefan.danca.dev"
             target="_blank"
-            style="
-              display: inline-block;
-              background-color: #ffdd00 !important;
-              color: #000000 !important;
-              padding: 10px 20px;
-              border-radius: 8px;
-              font-weight: bold;
-              text-decoration: none;
-              font-size: 14px;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-              transition: transform 0.2s;
-            "
+            class="bmac-footer-btn"
           >
-            <i class="fa-solid fa-mug-hot" style="margin-right: 8px"></i> Buy me
-            a Coffee
+            <i class="fa-solid fa-mug-hot bmac-icon"></i> Buy me a Coffee
           </a>
         </div>
 
@@ -265,7 +269,7 @@
       </div>
 
       <div class="footer-bottom" id="footer-copyright-text">
-        &copy; 2026 Ziarul cu Minciuni. Toate drepturile rezervate.
+        &copy; 2026 Ziarul Mincinos. Toate drepturile rezervate.
       </div>
     </footer>
 

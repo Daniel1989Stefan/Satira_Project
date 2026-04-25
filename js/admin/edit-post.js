@@ -347,7 +347,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   submitBtn.addEventListener("click", async (e) => {
     e.preventDefault();
-    console.log("🟢 CLICK PRINS! Am oprit refresh-ul paginii.");
 
     const unsavedButtons = document.querySelectorAll(
       ".gutenberg-block .edit-mode:not(.d-none) .btn-save-local",
@@ -369,7 +368,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const originalBtnText = submitBtn.innerHTML;
 
     try {
-      console.log("🟢 Extragem datele...");
       submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Se salvează modificările...`;
       submitBtn.style.pointerEvents = "none";
       submitBtn.style.opacity = "0.7";

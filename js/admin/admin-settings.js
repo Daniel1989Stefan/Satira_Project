@@ -75,6 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const viewSupportDesc = document.getElementById("view-support-desc");
   const viewCopyright = document.getElementById("view-copyright-text");
 
+  // NOU: Elementele de vizualizare pentru Documentele Legale
+  const viewTcText = document.getElementById("view-tc-text");
+  const viewPrivacyText = document.getElementById("view-privacy-text");
+  const viewCookiePolicyText = document.getElementById(
+    "view-cookie-policy-text",
+  );
+
   const cookieInput = document.getElementById("settings-cookie-text");
   const disclaimerInput = document.getElementById("settings-disclaimer-text");
   const emailInput = document.getElementById("settings-contact-email");
@@ -85,9 +92,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const supportDescInput = document.getElementById("settings-support-desc");
   const copyrightInput = document.getElementById("settings-copyright-text");
 
+  // NOU: Elementele de editare (formularele) pentru Documentele Legale
+  const tcTextInput = document.getElementById("settings-tc-text");
+  const privacyTextInput = document.getElementById("settings-privacy-text");
+  const cookiePolicyTextInput = document.getElementById(
+    "settings-cookie-policy-text",
+  );
+
   let currentSettingsData = null;
 
   const populateData = (data) => {
+    // Populare secțiune de vizualizare
     viewCookie.innerText = data.cookieText || "-";
     viewDisclaimer.innerText = data.disclaimerText || "-";
     viewEmail.innerText = data.contact?.email || "-";
@@ -99,6 +114,15 @@ document.addEventListener("DOMContentLoaded", () => {
       viewSupportDesc.innerText = data.supportDescription || "-";
     if (viewCopyright) viewCopyright.innerText = data.copyrightText || "-";
 
+    // NOU: Populare secțiune de vizualizare Documente Legale
+    if (viewTcText)
+      viewTcText.innerText = data.termsAndConditionsText || "Lipsă text";
+    if (viewPrivacyText)
+      viewPrivacyText.innerText = data.privacyPolicyText || "Lipsă text";
+    if (viewCookiePolicyText)
+      viewCookiePolicyText.innerText = data.cookiePolicyText || "Lipsă text";
+
+    // Populare formulare editare
     cookieInput.value = data.cookieText || "";
     disclaimerInput.value = data.disclaimerText || "";
     emailInput.value = data.contact?.email || "";
@@ -109,6 +133,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (supportDescInput)
       supportDescInput.value = data.supportDescription || "";
     if (copyrightInput) copyrightInput.value = data.copyrightText || "";
+
+    // NOU: Populare formulare editare Documente Legale
+    if (tcTextInput) tcTextInput.value = data.termsAndConditionsText || "";
+    if (privacyTextInput) privacyTextInput.value = data.privacyPolicyText || "";
+    if (cookiePolicyTextInput)
+      cookiePolicyTextInput.value = data.cookiePolicyText || "";
   };
 
   btnEdit.addEventListener("click", () => {
@@ -158,6 +188,12 @@ document.addEventListener("DOMContentLoaded", () => {
         phone: phoneInput.value,
         website: websiteInput.value,
       },
+      // NOU: Adăugarea Documentelor Legale în payload-ul de trimis
+      termsAndConditionsText: tcTextInput ? tcTextInput.value : "",
+      privacyPolicyText: privacyTextInput ? privacyTextInput.value : "",
+      cookiePolicyText: cookiePolicyTextInput
+        ? cookiePolicyTextInput.value
+        : "",
     };
 
     try {

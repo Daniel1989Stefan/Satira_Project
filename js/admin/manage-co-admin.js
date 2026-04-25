@@ -391,7 +391,8 @@ async function suspendAccount() {
     : "Fără motiv specificat";
 
   try {
-    await fetchAPI("/admin/disable-account", {
+    // ACTUALIZAT: Endpoint-ul schimbat la /admin/disable-co-admin
+    await fetchAPI("/admin/disable-co-admin", {
       method: "PATCH",
       credentials: "include",
       body: JSON.stringify({ email: currentCoAdminEmail, reason: reason }),
@@ -409,7 +410,7 @@ async function suspendAccount() {
 
 async function reactivateAccount() {
   try {
-    await fetchAPI("/admin/reactivate-account", {
+    await fetchAPI("/admin/reactivate-co-admin", {
       method: "PATCH",
       credentials: "include",
       body: JSON.stringify({ email: currentCoAdminEmail }),

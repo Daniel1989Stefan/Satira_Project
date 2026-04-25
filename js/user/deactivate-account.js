@@ -36,17 +36,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      let untilValue = null;
-      let textDurataConfirmare = "DEFINITIV";
+      // Calculăm data de expirare (acum avem doar 1, 3 sau 6 luni)
+      const monthsToAdd = parseInt(durationValue);
+      const futureDate = new Date();
+      futureDate.setMonth(futureDate.getMonth() + monthsToAdd);
 
-      if (durationValue !== "permanent") {
-        const monthsToAdd = parseInt(durationValue);
-        const futureDate = new Date();
-        futureDate.setMonth(futureDate.getMonth() + monthsToAdd);
-
-        untilValue = futureDate.toISOString().split("T")[0];
-        textDurataConfirmare = `pentru ${monthsToAdd} luni`;
-      }
+      const untilValue = futureDate.toISOString().split("T")[0];
+      const textDurataConfirmare = `pentru ${monthsToAdd} lun${monthsToAdd === 1 ? "ă" : "i"}`;
 
       const mesajConfirmare = `Ești sigur că vrei să dezactivezi contul ${textDurataConfirmare}? Vei pierde accesul IMEDIAT!`;
       const confirmare = confirm(mesajConfirmare);
@@ -63,15 +59,14 @@ document.addEventListener("DOMContentLoaded", () => {
           method: "PATCH",
           credentials: "include",
           body: JSON.stringify({
-            autoDeactivate: true,
             disabledUntil: untilValue,
             reason: reasonValue,
             loginPassword: passwordValue,
           }),
         });
 
-        messageBox.innerHTML =
-          "<span class='text-success'>✅ Contul a fost dezactivat. Te deconectăm instant...</span>";
+        // Backend-ul returnează un mesaj de succes cu data exactă, îl putem afișa direct!
+        messageBox.innerHTML = `<span class='text-success'>✅ ${response.message} Te deconectăm instant...</span>`;
 
         form.classList.add("d-none");
 

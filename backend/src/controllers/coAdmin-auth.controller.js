@@ -4,9 +4,12 @@ import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import jwt from "jsonwebtoken";
 import { getCoAdminCookiesOptions } from "../utils/cookies.js";
-import { sendEmail, changeCoAdminPassword } from "../utils/mail.js";
+import {
+  sendEmail,
+  changeCoAdminPassword,
+  accountReactivatedTemplate,
+} from "../utils/mail.js";
 import * as crypto from "node:crypto";
-import { ensureActiveAccount } from "../utils/deactivation.js";
 import { OAuth2Client } from "google-auth-library";
 
 ///---Generate Co-Admin Token---///
@@ -79,6 +82,83 @@ const resetPassword = asyncHandler(async (req, res) => {
 ///---END Activate co-admin Account (Change password)---///
 
 ///---Co-Admin Login---///
+// const coAdminLogin = asyncHandler(async (req, res) => {
+//   const { email, loginPassword, recaptchaToken } = req.body;
+
+//   if (!email) {
+//     throw new ApiError(400, "Adresa de e-mail este obligatorie.");
+//   }
+
+//   // VALIDARE RECAPTCHA
+//   if (!recaptchaToken) {
+//     throw new ApiError(
+//       400,
+//       "Validarea anti-robot (reCAPTCHA) este obligatorie.",
+//     );
+//   }
+
+//   const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+//   const googleResponse = await fetch(verifyUrl, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/x-www-form-urlencoded",
+//     },
+//     body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+//   });
+
+//   const googleData = await googleResponse.json();
+
+//   if (!googleData.success) {
+//     throw new ApiError(
+//       400,
+//       "Validarea reCAPTCHA a eșuat. Te rog să reîncerci.",
+//     );
+//   }
+//   // SFÂRȘIT VALIDARE RECAPTCHA
+
+//   const normalizedEmail = String(email || "")
+//     .trim()
+//     .toLowerCase();
+
+//   const coAdmin = await User.findOne({ email: normalizedEmail });
+
+//   if (!coAdmin) {
+//     throw new ApiError(404, "Contul nu există");
+//   }
+
+//   if (coAdmin.mustChangePassword) {
+//     throw new ApiError(
+//       403,
+//       "Te rugăm să îți verifici adresa de email pentru activarea contului",
+//     );
+//   }
+
+//   if (coAdmin.role !== "co-admin") {
+//     throw new ApiError(403, "Nu ești autorizat să accesezi această pagină");
+//   }
+
+//   const okP = await coAdmin.isPasswordCorrect(loginPassword);
+//   if (!okP) {
+//     throw new ApiError(401, "Emailul sau parola sunt incorecte");
+//   }
+
+//   await ensureActiveAccount(coAdmin); //verificare din nou daca e disabled sau nu
+
+//   const { accessToken, refreshToken } =
+//     await generateCoAdminAccessAndRefreshToken(coAdmin._id);
+
+//   const safeCoAdmin = await User.findById(coAdmin._id).select(
+//     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry",
+//   );
+
+//   const options = getCoAdminCookiesOptions();
+
+//   return res
+//     .status(200)
+//     .cookie("coAdminAccessToken", accessToken, options)
+//     .cookie("coAdminRefreshToken", refreshToken, options)
+//     .json(new ApiResponse(200, { coAdmin: safeCoAdmin }, "Co-Admin logged in"));
+// });
 const coAdminLogin = asyncHandler(async (req, res) => {
   const { email, loginPassword, recaptchaToken } = req.body;
 
@@ -86,7 +166,9 @@ const coAdminLogin = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Adresa de e-mail este obligatorie.");
   }
 
+  // ==========================================
   // VALIDARE RECAPTCHA
+  // ==========================================
   if (!recaptchaToken) {
     throw new ApiError(
       400,
@@ -111,7 +193,7 @@ const coAdminLogin = asyncHandler(async (req, res) => {
       "Validarea reCAPTCHA a eșuat. Te rog să reîncerci.",
     );
   }
-  // SFÂRȘIT VALIDARE RECAPTCHA
+  // ==========================================
 
   const normalizedEmail = String(email || "")
     .trim()
@@ -139,7 +221,54 @@ const coAdminLogin = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Emailul sau parola sunt incorecte");
   }
 
-  await ensureActiveAccount(coAdmin); //verificare din nou daca e disabled sau nu
+  if (coAdmin.deactivation?.isDisabled) {
+    const now = new Date();
+
+    // Verificăm dacă a fost suspendat
+    if (
+      coAdmin.deactivation.disabledByRole === "admin" ||
+      coAdmin.deactivation.disabledByRole === "co-admin"
+    ) {
+      const cineL_aBlocat =
+        coAdmin.deactivation.disabledByRole === "admin"
+          ? "Administrator"
+          : "alt Co-Administrator";
+
+      // a. Revocare acces definitivă
+      if (!coAdmin.deactivation.disabledUntil) {
+        throw new ApiError(
+          403,
+          `Accesul tău a fost revocat definitiv de către un ${cineL_aBlocat}. Motiv: ${coAdmin.deactivation.reason || "Nespecificat"}`,
+        );
+      }
+
+      // b. Sancțiune temporară care încă este activă
+      if (new Date(coAdmin.deactivation.disabledUntil) > now) {
+        const formattedDate = new Date(
+          coAdmin.deactivation.disabledUntil,
+        ).toLocaleDateString("ro-RO", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        });
+        throw new ApiError(
+          403,
+          `Accesul tău este suspendat de un ${cineL_aBlocat} până pe ${formattedDate}. Motiv: ${coAdmin.deactivation.reason || "Nespecificat"}`,
+        );
+      }
+    }
+
+    // Dacă ajunge aici, înseamnă că pedeapsa temporară
+    coAdmin.deactivation.isDisabled = false;
+    coAdmin.deactivation.disabledByRole = null;
+    coAdmin.deactivation.disabledBy = null;
+    coAdmin.deactivation.reason = null;
+    coAdmin.deactivation.disabledAt = null;
+    coAdmin.deactivation.disabledUntil = null;
+
+    await coAdmin.save({ validateBeforeSave: false });
+  }
+  // ==========================================
 
   const { accessToken, refreshToken } =
     await generateCoAdminAccessAndRefreshToken(coAdmin._id);
@@ -154,7 +283,13 @@ const coAdminLogin = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("coAdminAccessToken", accessToken, options)
     .cookie("coAdminRefreshToken", refreshToken, options)
-    .json(new ApiResponse(200, { coAdmin: safeCoAdmin }, "Co-Admin logged in"));
+    .json(
+      new ApiResponse(
+        200,
+        { coAdmin: safeCoAdmin },
+        "Co-Admin logged in successfully",
+      ),
+    );
 });
 ///---END Co-Admin Login---///
 
@@ -277,65 +412,156 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 ///---END Change Current Password---///
 
 ///---Disable Users---///
+// const disableUser = asyncHandler(async (req, res) => {
+//   const { email, disabledUntil, reason } = req.body;
+
+//   if (!email) throw new ApiError(400, "Adresa de email este obligatorie");
+
+//   const normalizedEmail = email.trim().toLowerCase();
+
+//   const user = await User.findOne({ email: normalizedEmail, role: "user" });
+
+//   if (!user) throw new ApiError(404, "Utilizatorul nu a fost găsit");
+
+//   if (user.deactivation && user.deactivation.isDisabled) {
+//     throw new ApiError(400, "Acest utilizator este deja dezactivat.");
+//   }
+
+//   if (!user.deactivation) user.deactivation = {}; //in cazul in care in user nu exista obiectul deactivation, cream un obiect nou cu nu acelasi nume, deactivation
+
+//   user.deactivation.isDisabled = true;
+//   user.deactivation.reason = typeof reason === "string" ? reason.trim() : "";
+//   user.deactivation.disabledAt = new Date();
+//   user.deactivation.disabledByRole = req.user.role;
+//   user.deactivation.disabledBy = req.user._id;
+
+//   if (disabledUntil) {
+//     const date = new Date(disabledUntil);
+
+//     if (Number.isNaN(date.getTime())) {
+//       throw new ApiError(400, "Data limită pentru dezactivare nu este validă");
+//     }
+
+//     const oneHourFromNow = Date.now() + 60 * 60 * 1000;
+//     if (date.getTime() < oneHourFromNow) {
+//       throw new ApiError(
+//         400,
+//         "Data reactivării trebuie să fie cu cel puțin o oră mai mare decât ora curentă",
+//       );
+//     }
+
+//     user.deactivation.disabledUntil = date;
+//   } else {
+//     user.deactivation.disabledUntil = null; // permanent
+//   }
+
+//   user.refreshToken = "";
+
+//   await user.save();
+
+//   return res.status(200).json(
+//     new ApiResponse(
+//       200,
+//       {
+//         isDisabled: user.deactivation.isDisabled,
+//         reason: user.deactivation.reason,
+//         disabledBy: user.deactivation.disabledBy,
+//         disabledByRole: user.deactivation.disabledByRole,
+//         disabledAt: user.deactivation.disabledAt,
+//         disabledUntil: user.deactivation.disabledUntil,
+//       },
+//       "User successfully disabled",
+//     ),
+//   );
+// });
 const disableUser = asyncHandler(async (req, res) => {
-  const { email, disabledUntil, reason } = req.body;
+  // 1. Verificăm permisiunile Co-Adminului care face cererea
+  const executingCoAdmin = await User.findById(req.user._id);
 
-  if (!email) throw new ApiError(400, "Adresa de email este obligatorie");
-
-  const normalizedEmail = email.trim().toLowerCase();
-
-  const user = await User.findOne({ email: normalizedEmail, role: "user" });
-
-  if (!user) throw new ApiError(404, "Utilizatorul nu a fost găsit");
-
-  if (user.deactivation && user.deactivation.isDisabled) {
-    throw new ApiError(400, "Acest utilizator este deja dezactivat.");
+  if (!executingCoAdmin.permissions?.manageUsers) {
+    throw new ApiError(
+      403,
+      "Acces interzis. Nu ai permisiunea de a gestiona utilizatori.",
+    );
   }
 
-  if (!user.deactivation) user.deactivation = {}; //in cazul in care in user nu exista obiectul deactivation, cream un obiect nou cu nu acelasi nume, deactivation
+  // 2. Extragem datele trimise din frontend
+  const { email, reason, disabledUntil, isUnderLegalHold } = req.body;
 
-  user.deactivation.isDisabled = true;
-  user.deactivation.reason = typeof reason === "string" ? reason.trim() : "";
-  user.deactivation.disabledAt = new Date();
-  user.deactivation.disabledByRole = req.user.role;
-  user.deactivation.disabledBy = req.user._id;
+  const normalizedEmail = String(email || "")
+    .trim()
+    .toLowerCase();
 
+  if (!normalizedEmail) {
+    throw new ApiError(
+      400,
+      "Adresa de e-mail a utilizatorului este obligatorie.",
+    );
+  }
+
+  const targetUser = await User.findOne({ email: normalizedEmail });
+
+  if (!targetUser) {
+    throw new ApiError(404, "Utilizatorul nu a fost găsit.");
+  }
+
+  if (targetUser.role !== "user") {
+    throw new ApiError(
+      403,
+      "Acțiune interzisă. Un Co-Admin poate suspenda exclusiv conturi de tip USER simplu.",
+    );
+  }
+
+  // 4. Aplicăm suspendarea
+  if (!targetUser.deactivation) targetUser.deactivation = {};
+
+  targetUser.deactivation.isDisabled = true;
+  targetUser.deactivation.reason =
+    typeof reason === "string" ? reason.trim() : "Fără motiv specificat";
+  targetUser.deactivation.disabledAt = new Date();
+
+  // Înregistrăm cine a dat ban-ul
+  targetUser.deactivation.disabledByRole = "co-admin";
+  targetUser.deactivation.disabledBy = req.user._id;
+
+  // Calculăm data expirării
   if (disabledUntil) {
     const date = new Date(disabledUntil);
 
     if (Number.isNaN(date.getTime())) {
-      throw new ApiError(400, "Data limită pentru dezactivare nu este validă");
-    }
-
-    const oneHourFromNow = Date.now() + 60 * 60 * 1000;
-    if (date.getTime() < oneHourFromNow) {
       throw new ApiError(
         400,
-        "Data reactivării trebuie să fie cu cel puțin o oră mai mare decât ora curentă",
+        "Data de suspendare trimisă din frontend nu este validă.",
       );
     }
-
-    user.deactivation.disabledUntil = date;
+    targetUser.deactivation.disabledUntil = date;
   } else {
-    user.deactivation.disabledUntil = null; // permanent
+    targetUser.deactivation.disabledUntil = null; // suspendare permanentă
   }
 
-  user.refreshToken = "";
+  if (isUnderLegalHold === true) {
+    if (!targetUser.deletion) targetUser.deletion = {};
 
-  await user.save();
+    targetUser.deletion.isUnderLegalHold = true;
+
+    // Folosim motivul suspendării ca referință
+    targetUser.deletion.legalHoldReason = `Setat manual de Co-Admin în timpul suspendării. Motiv original: ${targetUser.deactivation.reason}`;
+  }
+
+  // 5. Delogare forțată
+  targetUser.refreshToken = "";
+
+  await targetUser.save({ validateBeforeSave: false });
 
   return res.status(200).json(
     new ApiResponse(
       200,
       {
-        isDisabled: user.deactivation.isDisabled,
-        reason: user.deactivation.reason,
-        disabledBy: user.deactivation.disabledBy,
-        disabledByRole: user.deactivation.disabledByRole,
-        disabledAt: user.deactivation.disabledAt,
-        disabledUntil: user.deactivation.disabledUntil,
+        isDisabled: targetUser.deactivation.isDisabled,
+        disabledUntil: targetUser.deactivation.disabledUntil,
+        isUnderLegalHold: targetUser.deletion?.isUnderLegalHold || false,
       },
-      "User successfully disabled",
+      "Utilizatorul a fost suspendat cu succes.",
     ),
   );
 });
@@ -343,36 +569,76 @@ const disableUser = asyncHandler(async (req, res) => {
 
 ///---Reanable User ---///
 const reactivateUser = asyncHandler(async (req, res) => {
-  const { email } = req.body;
+  // 1. Verificare permisiuni
+  const executingCoAdmin = await User.findById(req.user._id);
 
-  if (!email) throw new ApiError(400, "Adresa de email este obligatorie");
-
-  const normalizedEmail = email.trim().toLowerCase();
-
-  const user = await User.findOne({ email: normalizedEmail, role: "user" });
-
-  if (!user)
+  if (!executingCoAdmin.permissions?.manageUsers) {
     throw new ApiError(
-      404,
-      "Utilizatorul nu a fost găsit. Te rugăm să verifici adresa de email.",
+      403,
+      "Acces interzis. Nu ai permisiunea de a gestiona utilizatori.",
     );
+  }
 
-  if (!user.deactivation?.isDisabled)
-    throw new ApiError(409, "Acest utilizator nu este dezactivat");
+  const { email } = req.body;
+  const normalizedEmail = String(email || "")
+    .trim()
+    .toLowerCase();
 
-  user.deactivation = {
-    isDisabled: false,
-  };
+  if (!normalizedEmail)
+    throw new ApiError(400, "Adresa de e-mail este obligatorie.");
 
-  await user.save();
+  const targetUser = await User.findOne({ email: normalizedEmail });
+
+  if (!targetUser) throw new ApiError(404, "Utilizatorul nu a fost găsit.");
+
+  if (targetUser.role !== "user") {
+    throw new ApiError(
+      403,
+      "Acțiune interzisă. Poți reactiva doar conturi de tip USER.",
+    );
+  }
+
+  // 3. Resetarea sancțiunii
+  if (targetUser.deactivation) {
+    targetUser.deactivation.isDisabled = false;
+    targetUser.deactivation.disabledByRole = null;
+    targetUser.deactivation.disabledBy = null;
+    targetUser.deactivation.reason = null;
+    targetUser.deactivation.disabledAt = null;
+    targetUser.deactivation.disabledUntil = null;
+  }
+
+  if (targetUser.deletion) {
+    targetUser.deletion.isPendingDeletion = false;
+    targetUser.deletion.scheduledForDeletionAt = null;
+    targetUser.deletion.requestedByRole = null;
+    targetUser.deletion.requestedBy = null;
+    targetUser.deletion.isUnderLegalHold = false;
+    targetUser.deletion.legalHoldReason = "";
+  }
+
+  await targetUser.save({ validateBeforeSave: false });
+
+  // 5. Trimiterea Email-ului de notificare
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5500";
+  const loginUrl = `${frontendUrl}/pages/user/login.html`;
+
+  const userNameDisplay =
+    targetUser.fullname || targetUser.nickname || "Utilizator";
+
+  await sendEmail({
+    email: targetUser.email,
+    subject: "Contul tău a fost reactivat!",
+    mailgenContent: accountReactivatedTemplate(userNameDisplay, loginUrl),
+  });
 
   return res
     .status(200)
     .json(
       new ApiResponse(
         200,
-        { email: user.email, isDisabled: user.deactivation.isDisabled },
-        "User successfully reactivated",
+        {},
+        "Utilizatorul a fost reactivat și notificat pe email cu succes.",
       ),
     );
 });

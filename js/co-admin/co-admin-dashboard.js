@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("🟢 Dashboard Co-Admin: Script inițializat.");
-
   localStorage.setItem("satira_role", "co-admin");
 
   await loadCoAdminDashboard();
@@ -11,14 +9,10 @@ async function loadCoAdminDashboard() {
   const welcomeMessage = document.getElementById("welcome-message");
 
   try {
-    console.log("📡 Se solicită datele co-adminului de la server...");
-
     const response = await fetchAPI("/co-admin/current-user", {
       method: "POST",
       credentials: "include",
     });
-
-    console.log("✅ Răspuns primit:", response);
 
     const user = response.data;
 
@@ -31,7 +25,6 @@ async function loadCoAdminDashboard() {
     welcomeMessage.innerHTML = `👋 Bun venit, ${user.fullname || user.nickname || "Colegule"}!`;
 
     const perms = user.permissions || {};
-    console.log("🔐 Permisiuni detectate:", perms);
 
     let cardsHtml = "";
 

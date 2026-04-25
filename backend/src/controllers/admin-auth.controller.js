@@ -8,6 +8,7 @@ import {
   sendEmail,
   forgotPasswordMailgenContent,
   changeCoAdminPassword,
+  accountReactivatedTemplate,
 } from "../utils/mail.js";
 import * as crypto from "node:crypto";
 import mongoose from "mongoose";
@@ -1014,32 +1015,99 @@ const getAllUsers = asyncHandler(async (req, res) => {
 });
 ///---END Get All Users---///
 
-///---Deactivate Users---///
-const disableAccount = asyncHandler(async (req, res) => {
-  const { email, disabledUntil, reason } = req.body;
+///---Disable CoAdmin---///
+const disableCoAdmin = asyncHandler(async (req, res) => {
+  const { email, reason } = req.body;
+
   const normalizedEmail = String(email || "")
     .trim()
     .toLowerCase();
-  if (!normalizedEmail)
+
+  if (!normalizedEmail) {
+    throw new ApiError(
+      400,
+      "Adresa de e-mail a co-adminului este obligatorie.",
+    );
+  }
+
+  const targetCoAdmin = await User.findOne({ email: normalizedEmail });
+
+  if (!targetCoAdmin) {
+    throw new ApiError(404, "Contul nu a fost găsit.");
+  }
+
+  if (targetCoAdmin.role !== "co-admin") {
+    throw new ApiError(
+      403,
+      "Această funcție este destinată exclusiv gestionării conturilor de Co-Admin.",
+    );
+  }
+
+  if (!targetCoAdmin.deactivation) targetCoAdmin.deactivation = {};
+
+  // Aplicăm suspendarea direct permanenta
+  targetCoAdmin.deactivation.isDisabled = true;
+  targetCoAdmin.deactivation.reason = reason
+    ? reason.trim()
+    : "Retragere acces de către Administrator";
+  targetCoAdmin.deactivation.disabledAt = new Date();
+  targetCoAdmin.deactivation.disabledUntil = null; // permanenta
+  targetCoAdmin.deactivation.disabledByRole = "admin";
+  targetCoAdmin.deactivation.disabledBy = req.user._id;
+
+  // Delogare forțată
+  targetCoAdmin.refreshToken = "";
+
+  await targetCoAdmin.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        "Accesul Co-Adminului a fost revocat cu succes.",
+      ),
+    );
+});
+///---END Disable CoAdmin---///
+
+///---Deactivate Users---///
+const disableUser = asyncHandler(async (req, res) => {
+  const { email, disabledUntil, reason, isUnderLegalHold } = req.body;
+
+  const normalizedEmail = String(email || "")
+    .trim()
+    .toLowerCase();
+
+  if (!normalizedEmail) {
     throw new ApiError(400, "Adresa de e-mail este obligatorie.");
+  }
 
   const user = await User.findOne({ email: normalizedEmail });
 
-  if (!user)
+  if (!user) {
     throw new ApiError(
       404,
       "Utilizatorul nu a fost găsit. Te rugăm să verifici din nou e-mailul.",
     );
+  }
 
-  if (user.role === "admin")
-    throw new ApiError(400, "Contul de administrator nu poate fi dezactivat.");
+  if (user.role !== "user") {
+    throw new ApiError(
+      403,
+      "Această funcție este destinată exclusiv dezactivării conturilor de tip USER.",
+    );
+  }
 
-  if (!coAdmin.deactivation) coAdmin.deactivation = {}; //in cazul in care in user nu exista obiectul deactivation, cream un obiect nou cu nu acelasi nume, deactivation
+  if (!user.deactivation) user.deactivation = {};
 
   user.deactivation.isDisabled = true;
-  user.deactivation.reason = typeof reason === "string" ? reason.trim() : "";
+  user.deactivation.reason =
+    typeof reason === "string" ? reason.trim() : "Fără motiv specificat";
   user.deactivation.disabledAt = new Date();
-  user.deactivation.disabledByRole = req.user.role;
+
+  user.deactivation.disabledByRole = req.user.role; // sau "co-admin" în controllerul de co-admin
   user.deactivation.disabledBy = req.user._id;
 
   if (disabledUntil) {
@@ -1059,12 +1127,20 @@ const disableAccount = asyncHandler(async (req, res) => {
 
     user.deactivation.disabledUntil = date;
   } else {
-    user.deactivation.disabledUntil = null; // permanent
+    user.deactivation.disabledUntil = null; // suspendare permanentă
+  }
+
+  if (isUnderLegalHold === true) {
+    if (!user.deletion) user.deletion = {};
+
+    user.deletion.isUnderLegalHold = true;
+
+    user.deletion.legalHoldReason = `Setat manual în timpul suspendării. Motiv original: ${user.deactivation.reason}`;
   }
 
   user.refreshToken = "";
 
-  await user.save();
+  await user.save({ validateBeforeSave: false });
 
   return res.status(200).json(
     new ApiResponse(
@@ -1073,11 +1149,10 @@ const disableAccount = asyncHandler(async (req, res) => {
         isDisabled: user.deactivation.isDisabled,
         reason: user.deactivation.reason,
         disabledBy: user.deactivation.disabledBy,
-        disabledByRole: user.deactivation.disabledByRole,
-        disabledAt: user.deactivation.disabledAt,
         disabledUntil: user.deactivation.disabledUntil,
+        isUnderLegalHold: user.deletion?.isUnderLegalHold || false,
       },
-      "User successfully disabled",
+      "Utilizatorul a fost suspendat cu succes.",
     ),
   );
 });
@@ -1089,25 +1164,55 @@ const reactivateAccount = asyncHandler(async (req, res) => {
   const normalizedEmail = String(email || "")
     .trim()
     .toLowerCase();
-  if (!normalizedEmail)
+
+  if (!normalizedEmail) {
     throw new ApiError(400, "Adresa de e-mail este obligatorie.");
+  }
 
   const user = await User.findOne({ email: normalizedEmail });
 
-  if (!user)
+  if (!user) {
     throw new ApiError(
       404,
       "Utilizatorul nu a fost găsit. Te rugăm să verifici dacă e-mailul este scris corect.",
     );
+  }
 
-  if (!user.deactivation?.isDisabled)
+  if (!user.deactivation?.isDisabled && !user.deletion?.isPendingDeletion) {
     throw new ApiError(409, "Contul este deja activ.");
+  }
 
-  user.deactivation = {
-    isDisabled: false,
-  };
+  if (user.deactivation) {
+    user.deactivation.isDisabled = false;
+    user.deactivation.disabledByRole = null;
+    user.deactivation.disabledBy = null;
+    user.deactivation.reason = null;
+    user.deactivation.disabledAt = null;
+    user.deactivation.disabledUntil = null;
+  }
 
-  await user.save();
+  if (user.deletion) {
+    user.deletion.isPendingDeletion = false;
+    user.deletion.scheduledForDeletionAt = null;
+    user.deletion.requestedByRole = null;
+    user.deletion.requestedBy = null;
+    user.deletion.isUnderLegalHold = false;
+    user.deletion.legalHoldReason = "";
+  }
+
+  await user.save({ validateBeforeSave: false });
+
+  // 3. Trimiterea Email-ului de notificare
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5500";
+  const loginUrl = `${frontendUrl}/pages/user/login.html`;
+
+  const userNameDisplay = user.fullname || user.nickname || "Utilizator";
+
+  await sendEmail({
+    email: user.email,
+    subject: "Contul tău a fost reactivat!",
+    mailgenContent: accountReactivatedTemplate(userNameDisplay, loginUrl),
+  });
 
   return res
     .status(200)
@@ -1115,11 +1220,77 @@ const reactivateAccount = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         { email: user.email, isDisabled: user.deactivation.isDisabled },
-        "User successfully reactivated",
+        "Utilizatorul a fost reactivat și notificat pe email cu succes.",
       ),
     );
 });
 ///---END Reactivate User---///
+
+///---Reactivate Co-admin---///
+const reactivateCoAdmin = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const normalizedEmail = String(email || "")
+    .trim()
+    .toLowerCase();
+
+  if (!normalizedEmail) {
+    throw new ApiError(400, "Adresa de e-mail este obligatorie.");
+  }
+
+  const targetCoAdmin = await User.findOne({ email: normalizedEmail });
+
+  if (!targetCoAdmin) {
+    throw new ApiError(
+      404,
+      "Utilizatorul nu a fost găsit. Te rugăm să verifici din nou e-mailul.",
+    );
+  }
+
+  if (targetCoAdmin.role !== "co-admin") {
+    throw new ApiError(
+      403,
+      "Această funcție este destinată exclusiv reactivării conturilor de Co-Admin.",
+    );
+  }
+
+  if (
+    !targetCoAdmin.deactivation?.isDisabled &&
+    !targetCoAdmin.deletion?.isPendingDeletion
+  ) {
+    throw new ApiError(409, "Contul de Co-Admin este deja complet activ.");
+  }
+
+  // 1. Resetăm corect obiectul de Suspendare
+  if (targetCoAdmin.deactivation) {
+    targetCoAdmin.deactivation.isDisabled = false;
+    targetCoAdmin.deactivation.disabledByRole = null;
+    targetCoAdmin.deactivation.disabledBy = null;
+    targetCoAdmin.deactivation.reason = null;
+    targetCoAdmin.deactivation.disabledAt = null;
+    targetCoAdmin.deactivation.disabledUntil = null;
+  }
+
+  // 2. Anulăm orice cerere de Ștergere Definitivă
+  if (targetCoAdmin.deletion) {
+    targetCoAdmin.deletion.isPendingDeletion = false;
+    targetCoAdmin.deletion.scheduledForDeletionAt = null;
+    targetCoAdmin.deletion.requestedByRole = null;
+    targetCoAdmin.deletion.requestedBy = null;
+  }
+
+  await targetCoAdmin.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        "Accesul Co-Adminului a fost reactivat cu succes.",
+      ),
+    );
+});
+///---Reactivate Co-admin---///
 
 ///---get all disabled users---///
 const disabledUsersList = asyncHandler(async (req, res) => {
@@ -1262,9 +1433,11 @@ export {
   coAdminList,
   coAdmin,
   getAllUsers,
-  disableAccount,
+  disableUser,
   disabledUsersList,
   disabledCoAdminList,
   reactivateAccount,
   updatePermissions,
+  disableCoAdmin,
+  reactivateCoAdmin,
 };

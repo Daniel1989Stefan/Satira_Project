@@ -1,9 +1,7 @@
 import Settings from "../models/Settings.js";
 
-// 1. Obține setările (Public - accesibil oricui)
 export const getSettings = async (req, res) => {
   try {
-    // Căutăm primul document. Dacă nu există, folosim unul gol (care va lua valorile default din model)
     let settings = await Settings.findOne();
 
     if (!settings) {
@@ -22,7 +20,6 @@ export const getSettings = async (req, res) => {
   }
 };
 
-// 2. Actualizează setările (Protejat - doar pentru Admin)
 export const updateSettings = async (req, res) => {
   try {
     const {
@@ -32,10 +29,11 @@ export const updateSettings = async (req, res) => {
       supportDescription,
       copyrightText,
       contact,
+      termsAndConditionsText,
+      privacyPolicyText,
+      cookiePolicyText,
     } = req.body;
 
-    // Căutăm singurul document existent și îi facem update
-    // Dacă nu există, îl creăm (upsert: true)
     const updatedSettings = await Settings.findOneAndUpdate(
       {},
       {
@@ -45,6 +43,9 @@ export const updateSettings = async (req, res) => {
         supportDescription,
         copyrightText,
         contact,
+        termsAndConditionsText,
+        privacyPolicyText,
+        cookiePolicyText,
       },
       { new: true, upsert: true, runValidators: true },
     );

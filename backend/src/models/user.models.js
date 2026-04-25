@@ -116,7 +116,39 @@ const userSchema = new Schema(
       disabledBy: { type: Schema.Types.ObjectId, ref: "User" },
       reason: { type: String, trim: true },
       disabledAt: { type: Date },
-      disabledUntil: { type: Date }, //in cazul in care se doreaste auto-reactivarea
+      disabledUntil: { type: Date }, // Folosit pentru auto-reactivare după 1/3/6 luni
+    },
+
+    deletion: {
+      isPendingDeletion: {
+        type: Boolean,
+        default: false,
+      },
+      scheduledForDeletionAt: {
+        type: Date, // Data la care Cron Job-ul va șterge definitiv contul (ex: Date.now() + 30 zile)
+      },
+      requestedByRole: {
+        type: String,
+        enum: ["self", "admin"], // co-admin nu are voie sa stearga definitiv conturi, doar admin-ul sau userul insusi
+      },
+      requestedBy: { type: Schema.Types.ObjectId, ref: "User" },
+      isUnderLegalHold: {
+        type: Boolean,
+        default: false,
+      },
+      legalHoldReason: {
+        type: String,
+        trim: true, // Ex: pt motiv de cercetare juridica din partea autoritatilor competente
+      }, //daca isUnderLegalHold === true, treci mai departe si nu stergi nimic
+    },
+    dataExportRequest: {
+      isPending: {
+        type: Boolean,
+        default: false,
+      },
+      requestedAt: {
+        type: Date,
+      },
     },
     authProvider: {
       type: String,

@@ -17,8 +17,9 @@ import {
   getUserCookiesOptions,
   googleUserCookiesOptions,
 } from "../utils/cookies.js";
-import { ensureActiveAccount } from "../utils/deactivation.js";
 import { OAuth2Client } from "google-auth-library";
+import { ensureActiveAccount } from "../utils/deactivation.js";
+import { Post } from "../models/post.models.js";
 
 ///----////
 //Experiența Utilizatorului: Fără acest mecanism, utilizatorul ar trebui să se logheze cu user și parolă de fiecare dată când închide tab-ul sau când expiră biletul de scurtă durată.
@@ -41,7 +42,6 @@ const generateAccessAndRefreshToken = async (userId) => {
 
     return { accessToken, refreshToken };
   } catch (error) {
-    console.log("EROAREA REALA LA TOKEN: ", error);
     throw new ApiError(
       500,
       "S-a produs o eroare la configurarea sesiunii. Te rugăm să încerci să te autentifici din nou.",
@@ -129,7 +129,7 @@ const registerUser = asyncHandler(async (req, res) => {
 ///---Inregistrarea / autentificarea prin Google---///
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 export const googleAuthLogin = asyncHandler(async (req, res) => {
-  const { credential } = req.body;
+  const { credential, intent } = req.body;
 
   if (!credential) {
     throw new ApiError(
@@ -144,7 +144,7 @@ export const googleAuthLogin = asyncHandler(async (req, res) => {
     audience: process.env.GOOGLE_CLIENT_ID,
   });
 
-  // 2. Extragem datele sigure trimise de Google (am scos 'picture')
+  // 2. Extragem datele sigure trimise de Google
   const payload = ticket.getPayload();
   const { email, name, email_verified } = payload;
 
@@ -155,24 +155,42 @@ export const googleAuthLogin = asyncHandler(async (req, res) => {
   // 3. Căutăm utilizatorul în baza noastră de date
   let user = await User.findOne({ email: email.toLowerCase() });
 
-  if (!user) {
-    // 4. Dacă nu există, ÎL CREĂM AUTOMAT
-    // Generăm o parolă aleatoare pe care nu o va folosi niciodată (doar ca să validăm Modelul)
-    const randomPassword = Math.random().toString(36).slice(-8) + "A1!";
+  if (intent === "login") {
+    // Dacă utilizatorul este pe pagina de LOGIN, el TREBUIE să aibă deja un cont creat.
+    // Nu îi creăm unul aici pentru că altfel ar ocoli checkbox-ul de T&C de la Register.
+    if (!user) {
+      throw new ApiError(
+        404,
+        "Acest cont nu există. Te rugăm să mergi pe pagina de Înregistrare pentru a crea un cont și a accepta Termenii și Condițiile.",
+      );
+    }
+  } else if (intent === "register") {
+    // Dacă este pe pagina de REGISTER, știm că a bifat T&C.
+    // Dacă nu are cont, îl creăm. Dacă are deja cont, codul va trece mai departe și pur și simplu îl va loga (practică bună de UX).
+    if (!user) {
+      const randomPassword = Math.random().toString(36).slice(-8) + "A1!";
 
-    user = await User.create({
-      nickname: name,
-      email: email.toLowerCase(),
-      password: randomPassword,
-      isEmailVerified: true, // E verificat deja de Google
-      authProvider: "google",
-    });
+      user = await User.create({
+        nickname: name,
+        email: email.toLowerCase(),
+        password: randomPassword,
+        isEmailVerified: true, // E verificat deja de Google
+        authProvider: "google",
+      });
+    }
+  } else {
+    // Fallback de siguranță: dacă lipsește intenția (de ex. cineva accesează API-ul direct din Postman)
+    if (!user) {
+      throw new ApiError(
+        400,
+        "Acțiune invalidă. Te rugăm să te înregistrezi folosind formularul de pe site.",
+      );
+    }
   }
 
   // Verificăm dacă a fost suspendat de Admin ÎNAINTE de a-i da token-urile
   await ensureActiveAccount(user);
 
-  // 5. generăm token-urile NOASTRE
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     user._id,
   );
@@ -197,6 +215,87 @@ export const googleAuthLogin = asyncHandler(async (req, res) => {
 });
 ///---END Inregistrarea / autentificarea prin Google---///
 
+// const login = asyncHandler(async (req, res) => {
+//   // Extragem datele trimise de user, inclusiv recaptchaToken:
+//   const { email, loginPassword, recaptchaToken } = req.body;
+
+//   if (!email) {
+//     throw new ApiError(400, "Adresa de e-mail este obligatorie.");
+//   }
+
+//   // VALIDARE RECAPTCHA
+//   if (!recaptchaToken) {
+//     throw new ApiError(
+//       400,
+//       "Validarea anti-robot (reCAPTCHA) este obligatorie.",
+//     );
+//   }
+
+//   const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+//   const googleResponse = await fetch(verifyUrl, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/x-www-form-urlencoded",
+//     },
+//     body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+//   });
+
+//   const googleData = await googleResponse.json();
+
+//   if (!googleData.success) {
+//     throw new ApiError(
+//       400,
+//       "Validarea reCAPTCHA a eșuat. Te rog să reîncerci.",
+//     );
+//   }
+//   // SFÂRȘIT VALIDARE RECAPTCHA
+
+//   const normalizedEmail = email.trim().toLowerCase();
+
+//   // Căutam userul in DB:
+//   const user = await User.findOne({ email: normalizedEmail, role: "user" });
+
+//   if (!user) {
+//     throw new ApiError(404, "E-mailul sau parola sunt incorecte");
+//   }
+
+//   // Verificăm dacă parola introdusă în req.body e corectă
+//   const isPasswordValid = await user.isPasswordCorrect(loginPassword);
+
+//   if (!isPasswordValid) {
+//     throw new ApiError(401, "E-mailul sau parola sunt incorecte");
+//   }
+
+//   await ensureActiveAccount(user); // verificare din nou daca e disabled sau nu
+
+//   // Dacă e ok, generăm cele 2 chei (token).
+//   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+//     user._id,
+//   );
+
+//   // Preluăm datele utilizatorului din nou dar fără parolă și refreshToken:
+//   const loggedInUser = await User.findById(user._id).select(
+//     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+//   );
+
+//   // Configurăm opțiunile pt cookies:
+//   const options = getUserCookiesOptions();
+
+//   // Trimitem răspunsul către client:
+//   return res
+//     .status(200)
+//     .cookie("accessToken", accessToken, options)
+//     .cookie("refreshToken", refreshToken, options)
+//     .json(
+//       new ApiResponse(
+//         200,
+//         {
+//           user: loggedInUser,
+//         },
+//         "User logged in successfully",
+//       ),
+//     );
+// });
 const login = asyncHandler(async (req, res) => {
   // Extragem datele trimise de user, inclusiv recaptchaToken:
   const { email, loginPassword, recaptchaToken } = req.body;
@@ -205,7 +304,9 @@ const login = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Adresa de e-mail este obligatorie.");
   }
 
+  // ==========================================
   // VALIDARE RECAPTCHA
+  // ==========================================
   if (!recaptchaToken) {
     throw new ApiError(
       400,
@@ -230,7 +331,7 @@ const login = asyncHandler(async (req, res) => {
       "Validarea reCAPTCHA a eșuat. Te rog să reîncerci.",
     );
   }
-  // SFÂRȘIT VALIDARE RECAPTCHA
+  // ==========================================
 
   const normalizedEmail = email.trim().toLowerCase();
 
@@ -248,14 +349,75 @@ const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, "E-mailul sau parola sunt incorecte");
   }
 
-  await ensureActiveAccount(user); // verificare din nou daca e disabled sau nu
+  // ==========================================
+  // LOGICĂ REACTIVARE
+  // ==========================================
 
-  // Dacă e ok, generăm cele 2 chei (token).
+  // 1. Verificăm dacă utilizatorul a fost sancționat disciplinar
+  if (
+    user.deactivation?.isDisabled &&
+    user.deactivation?.disabledByRole !== "self"
+  ) {
+    const now = new Date();
+
+    // a. Sancțiune permanentă (disabledUntil este null)
+    if (!user.deactivation.disabledUntil) {
+      throw new ApiError(
+        403,
+        `Contul tău a fost suspendat permanent de către un administrator. Motiv: ${user.deactivation.reason}`,
+      );
+    }
+
+    // b. Sancțiune temporară activă (data de expirare este în viitor)
+    if (new Date(user.deactivation.disabledUntil) > now) {
+      const formattedDate = new Date(
+        user.deactivation.disabledUntil,
+      ).toLocaleDateString("ro-RO", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+      throw new ApiError(
+        403,
+        `Contul tău este suspendat până pe ${formattedDate}. Motiv: ${user.deactivation.reason}`,
+      );
+    }
+
+    // Dacă trece de aceste if-uri, înseamnă că pedeapsa a expirat! Îl lăsăm să continue.
+  }
+
+  let wasReactivated = false;
+
+  // 2. Anulăm Suspendarea (Dacă a fost pusă de el însuși, SAU dacă pedeapsa a expirat)
+  if (user.deactivation?.isDisabled) {
+    user.deactivation.isDisabled = false;
+    user.deactivation.disabledByRole = null;
+    user.deactivation.disabledBy = null;
+    user.deactivation.reason = null;
+    user.deactivation.disabledAt = null;
+    user.deactivation.disabledUntil = null;
+    wasReactivated = true;
+  }
+
+  // 3. Anulăm cererea de Ștergere Definitivă GDPR (Soft Delete)
+  if (user.deletion?.isPendingDeletion) {
+    user.deletion.isPendingDeletion = false;
+    user.deletion.scheduledForDeletionAt = null;
+    user.deletion.requestedByRole = null;
+    user.deletion.requestedBy = null;
+    wasReactivated = true;
+  }
+
+  // Dacă a intervenit orice fel de reactivare, salvăm modificările în baza de date
+  if (wasReactivated) {
+    await user.save({ validateBeforeSave: false });
+  }
+  // ==========================================
+
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     user._id,
   );
 
-  // Preluăm datele utilizatorului din nou dar fără parolă și refreshToken:
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
   );
@@ -263,7 +425,11 @@ const login = asyncHandler(async (req, res) => {
   // Configurăm opțiunile pt cookies:
   const options = getUserCookiesOptions();
 
-  // Trimitem răspunsul către client:
+  // Definim un mesaj dinamic
+  const succesMessage = wasReactivated
+    ? "Contul tău a fost reactivat cu succes. Bine ai revenit!"
+    : "User logged in successfully";
+
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
@@ -273,8 +439,9 @@ const login = asyncHandler(async (req, res) => {
         200,
         {
           user: loggedInUser,
+          wasReactivated: wasReactivated,
         },
-        "User logged in successfully",
+        succesMessage,
       ),
     );
 });
@@ -788,45 +955,122 @@ const changeNickname = asyncHandler(async (req, res) => {
 ///---END Change Nickname---///
 
 ///---Deactivate Account---///
+
 const autoDeactivateAccount = asyncHandler(async (req, res) => {
-  const { autoDeactivate, disabledUntil, reason } = req.body; //autoDeactivate = boolean
+  // 1. Preluăm datele exact așa cum le trimite fetchAPI-ul din frontend
+  const { loginPassword, reason, disabledUntil } = req.body;
 
-  if (!autoDeactivate)
-    throw new ApiError(400, "Nu au fost detectate modificări");
+  if (!reason) {
+    throw new ApiError(400, "Motivul dezactivării este obligatoriu.");
+  }
+  if (!loginPassword) {
+    throw new ApiError(400, "Parola este necesară pentru a confirma acțiunea.");
+  }
 
-  const user = await User.findById(req.user?._id);
+  // 3. Căutăm utilizatorul în baza de date
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(404, "Sesiune invalidă. Utilizatorul nu a fost găsit.");
+  }
 
-  if (!user)
-    throw new ApiError(
-      401,
-      "Te rugăm să te autentifici pentru a putea solicita dezactivarea contului",
-    );
+  // 4. Verificăm parola pentru securitate
+  const isPasswordValid = await user.isPasswordCorrect(loginPassword);
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Parola curentă este incorectă.");
+  }
 
-  if (user.role !== "user") throw new ApiError(403, "Acces neautorizat");
-
+  // 5. Actualizăm obiectul "deactivation" din baza de date
   user.deactivation.isDisabled = true;
-  user.deactivation.reason = typeof reason === "string" ? reason.trim() : "";
-  user.deactivation.disabledAt = new Date();
   user.deactivation.disabledByRole = "self";
   user.deactivation.disabledBy = user._id;
+  user.deactivation.reason = reason.trim();
+  user.deactivation.disabledAt = new Date();
 
+  // Dacă "disabledUntil" este null (adică perioada "permanent" din frontend), salvăm null.
+  // Altfel, transformăm string-ul ISO primit în obiect de tip Date.
+  user.deactivation.disabledUntil = disabledUntil
+    ? new Date(disabledUntil)
+    : null;
+
+  // 6. Golim refreshToken-ul pentru a invalida sesiunea curentă în DB
+  user.refreshToken = "";
+
+  // Salvăm modificările omițând validările extra (pentru că nu am modificat email sau parola)
+  await user.save({ validateBeforeSave: false });
+
+  // 7. Ștergem cookie-urile din browserul utilizatorului
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  };
+
+  let mesajSucces = "Contul tău a fost suspendat pe perioadă nedeterminată.";
   if (disabledUntil) {
-    const date = new Date(disabledUntil);
-
-    if (Number.isNaN(date.getTime())) {
-      throw new ApiError(400, "Formatul datei introduse este incorect");
-    }
-
-    user.deactivation.disabledUntil = date;
-  } else {
-    user.deactivation.disabledUntil = null; // permanent
+    const d = new Date(disabledUntil);
+    const formattedDate = d.toLocaleDateString("ro-RO", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+    mesajSucces = `Contul tău a fost suspendat până pe ${formattedDate}.`;
   }
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, mesajSucces));
+});
+///---END Deactivate Account---///
+
+///---Request Account Deletion ---///
+const requestAccountDeletion = asyncHandler(async (req, res) => {
+  const { loginPassword } = req.body;
+
+  if (!loginPassword) {
+    throw new ApiError(
+      400,
+      "Parola este necesară pentru a confirma ștergerea contului.",
+    );
+  }
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(404, "Sesiune invalidă. Utilizatorul nu a fost găsit.");
+  }
+
+  // Verificăm parola pentru securitate maximă
+  const isPasswordValid = await user.isPasswordCorrect(loginPassword);
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Parola curentă este incorectă.");
+  }
+
+  // Setăm data de ștergere exact peste 30 de zile de acum
+  const deletionDate = new Date();
+  deletionDate.setDate(deletionDate.getDate() + 30);
+
+  // Ne asigurăm că obiectul deletion există
+  if (!user.deletion) user.deletion = {};
+
+  // Actualizăm starea în baza de date
+  user.deletion.isPendingDeletion = true;
+  user.deletion.scheduledForDeletionAt = deletionDate;
+  user.deletion.requestedByRole = "self";
+  user.deletion.requestedBy = user._id;
 
   user.refreshToken = "";
 
-  await user.save();
+  await user.save({ validateBeforeSave: false });
 
+  // Setările pentru ștergerea cookie-urilor
   const options = getUserCookiesOptions();
+
+  const formattedDate = deletionDate.toLocaleDateString("ro-RO", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
 
   return res
     .status(200)
@@ -835,12 +1079,49 @@ const autoDeactivateAccount = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { isDisabled: true },
-        "Account successfully deactivated",
+        {},
+        `Contul este programat pentru ștergere pe ${formattedDate}. Ai 30 de zile să te loghezi înapoi pentru a anula.`,
       ),
     );
 });
-///---END Deactivate Account---///
+///---END Request Account Deletion ---///
+
+///---Download personal data---///
+const requestDataExport = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "Utilizatorul nu a fost găsit.");
+  }
+
+  // Prevenim dubla cerere
+  if (user.dataExportRequest?.isPending) {
+    throw new ApiError(
+      409,
+      "Ai deja o cerere în curs de procesare. Vei primi email-ul în curând.",
+    );
+  }
+
+  user.dataExportRequest = {
+    isPending: true,
+    requestedAt: new Date(),
+  };
+
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        "Cererea ta a fost înregistrată cu succes. Vei primi un email cu arhiva datelor tale în maxim 30 de zile.",
+      ),
+    );
+});
+///---END Download personal data---///
 
 export {
   registerUser,
@@ -856,4 +1137,6 @@ export {
   updateEmail,
   changeNickname,
   autoDeactivateAccount,
+  requestAccountDeletion,
+  requestDataExport,
 };

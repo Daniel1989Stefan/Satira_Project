@@ -43,10 +43,6 @@ async function fetchAPI(endpoint, options = {}, isRetry = false) {
       endpoint.includes("/verify-email");
 
     if (!response.ok && isTokenError && !isRetry && !isAuthRoute) {
-      console.log(
-        "🔄 Sesiune inexistentă/expirată! Încercăm reînnoirea tăcută...",
-      );
-
       let refreshRoute = "/user/refresh-token";
 
       if (endpoint.startsWith("/admin")) {
@@ -63,9 +59,6 @@ async function fetchAPI(endpoint, options = {}, isRetry = false) {
         });
 
         if (refreshResponse.ok) {
-          console.log(
-            "✅ Reînnoire reușită! Reluăm cererea inițială ascuns...",
-          );
           return await fetchAPI(endpoint, options, true);
         } else {
           throw new Error("Refresh eșuat.");

@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const changeEmailSection = document.getElementById("change-email-section");
   const authProviderBadge = document.getElementById("auth-provider-badge");
 
+  const btnRequestData = document.getElementById("btn-request-data");
+  const dataRequestStatus = document.getElementById("data-request-status");
+
   try {
     const response = await fetchAPI("/user/current-user", {
       method: "POST",
@@ -68,24 +71,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ========================================================
     if (user.authProvider === "google") {
       if (displayEmail) {
-        displayEmail.readOnly = true;
+        // În loc de .style.backgroundColor, poți face acest câmp disabled
+        // ca să preia automat stilul implicit al browserului pt elemente inactive
+        displayEmail.disabled = true;
         displayEmail.title =
           "Email-ul conectat prin Google nu poate fi modificat.";
-        displayEmail.style.backgroundColor = "#f0f0f0";
-        displayEmail.style.cursor = "not-allowed";
       }
 
       if (changePasswordSection) {
-        changePasswordSection.style.display = "none";
+        changePasswordSection.classList.add("d-none");
       }
 
       if (changeEmailSection) {
-        changeEmailSection.style.display = "none";
+        changeEmailSection.classList.add("d-none");
       }
 
       if (authProviderBadge) {
         authProviderBadge.innerHTML = "🔗 Conectat prin Google";
-        authProviderBadge.className = "text-info font-bold text-sm mb-10";
+        authProviderBadge.className = "auth-badge-info";
+      }
+    }
+
+    // ========================================================
+    // Verificăm dacă are deja o cerere GDPR în așteptare
+    // ========================================================
+    if (user.dataExportRequest?.isPending) {
+      if (btnRequestData && dataRequestStatus) {
+        btnRequestData.disabled = true; // :disabled face opacity 0.6 si cursor: not-allowed din CSS
+
+        dataRequestStatus.classList.remove("d-none");
+        dataRequestStatus.className = "status-message status-msg-info"; // Folosim CSS pt bg/border
+        dataRequestStatus.innerHTML =
+          "ℹ️ Ai o solicitare de export date în curs de procesare. Vei primi arhiva pe email în maxim 30 de zile.";
       }
     }
   } catch (error) {
@@ -94,6 +111,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // ========================================================
+  // Eveniment Click pentru Solicitare Date GDPR
+  // ========================================================
+  if (btnRequestData) {
+    btnRequestData.addEventListener("click", async () => {
+      btnRequestData.disabled = true;
+      btnRequestData.innerHTML = `<span><i class="fa-solid fa-spinner fa-spin"></i> Se trimite cererea...</span>`;
+
+      dataRequestStatus.classList.remove("d-none");
+      dataRequestStatus.className = "status-message"; // Resetam alte culori
+      dataRequestStatus.innerHTML =
+        "<span class='text-info'>Se procesează solicitarea... ⏳</span>";
+
+      try {
+        const response = await fetchAPI("/user/request-data-export", {
+          method: "POST",
+          credentials: "include",
+        });
+
+        // Succes
+        btnRequestData.innerHTML = `<span>📥 Solicită Arhiva Datelor (GDPR)</span>`;
+        // btnRequestData.disabled = true; raman activat de sus
+
+        dataRequestStatus.className = "status-message status-msg-success";
+        dataRequestStatus.innerHTML = `✅ ${response.message}`;
+      } catch (error) {
+        // Eroare
+        btnRequestData.disabled = false;
+        btnRequestData.innerHTML = `<span>📥 Solicită Arhiva Datelor (GDPR)</span>`;
+
+        dataRequestStatus.className = "status-message status-msg-error";
+        dataRequestStatus.innerHTML = `❌ ${error.message}`;
+      }
+    });
+  }
+
+  // ========================================================
+  // Restul codului pentru resendBtn și logoutBtn
+  // ========================================================
   if (resendBtn) {
     resendBtn.addEventListener("click", async () => {
       if (resendMessage)

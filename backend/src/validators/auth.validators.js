@@ -17,9 +17,6 @@ const changeEmailValidator = () => returnValues(["newEmail", "loginPassword"]);
 
 const changeNicknameValidator = () => returnValues(["newNickname"]);
 
-const autoDeactivationAccountValidator = () =>
-  returnValues(["autoDeactivate", "reason"]);
-
 export {
   userRegisterValidator,
   userLoginValidator,
@@ -28,5 +25,4 @@ export {
   userResetForgotPasswordValidator,
   changeEmailValidator,
   changeNicknameValidator,
-  autoDeactivationAccountValidator,
 };

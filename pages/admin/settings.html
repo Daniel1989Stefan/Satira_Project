@@ -365,6 +365,81 @@
             </p>
           </div>
 
+          <h3
+            style="
+              margin-top: 30px;
+              margin-bottom: 15px;
+              color: var(--text-main);
+              border-bottom: 1px solid var(--border-color);
+              padding-bottom: 5px;
+            "
+          >
+            Documente Legale (Texte Complete)
+          </h3>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)"
+              >Termeni și Condiții:</strong
+            >
+            <div
+              id="view-tc-text"
+              style="
+                color: var(--text-muted);
+                margin-top: 5px;
+                background: var(--bg-color);
+                padding: 10px;
+                border-radius: 5px;
+                max-height: 150px;
+                overflow-y: auto;
+                white-space: pre-wrap;
+              "
+            >
+              Se încarcă...
+            </div>
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <strong style="color: var(--text-main)"
+              >Politica de Confidențialitate (GDPR):</strong
+            >
+            <div
+              id="view-privacy-text"
+              style="
+                color: var(--text-muted);
+                margin-top: 5px;
+                background: var(--bg-color);
+                padding: 10px;
+                border-radius: 5px;
+                max-height: 150px;
+                overflow-y: auto;
+                white-space: pre-wrap;
+              "
+            >
+              Se încarcă...
+            </div>
+          </div>
+
+          <div style="margin-bottom: 25px">
+            <strong style="color: var(--text-main)"
+              >Politica de Cookies:</strong
+            >
+            <div
+              id="view-cookie-policy-text"
+              style="
+                color: var(--text-muted);
+                margin-top: 5px;
+                background: var(--bg-color);
+                padding: 10px;
+                border-radius: 5px;
+                max-height: 150px;
+                overflow-y: auto;
+                white-space: pre-wrap;
+              "
+            >
+              Se încarcă...
+            </div>
+          </div>
+
           <button
             id="btn-edit-settings"
             style="
@@ -392,7 +467,7 @@
                 padding-bottom: 5px;
               "
             >
-              Editează Textele Legale
+              Editează Textele Legale & Footer
             </h3>
 
             <div class="form-group" style="margin-bottom: 20px">
@@ -622,6 +697,99 @@
                   color: var(--text-main);
                 "
               />
+            </div>
+
+            <h3
+              style="
+                margin-top: 30px;
+                margin-bottom: 15px;
+                color: var(--text-main);
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 5px;
+              "
+            >
+              Editează Documentele Legale
+            </h3>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-tc-text"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+              >
+                Text Termeni și Condiții (T&C)
+              </label>
+              <textarea
+                id="settings-tc-text"
+                rows="10"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              ></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px">
+              <label
+                for="settings-privacy-text"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+              >
+                Text Politica de Confidențialitate (GDPR)
+              </label>
+              <textarea
+                id="settings-privacy-text"
+                rows="10"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              ></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 30px">
+              <label
+                for="settings-cookie-policy-text"
+                style="
+                  display: block;
+                  margin-bottom: 5px;
+                  font-weight: bold;
+                  color: var(--text-main);
+                "
+              >
+                Text Politica de Cookies
+              </label>
+              <textarea
+                id="settings-cookie-policy-text"
+                rows="8"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid var(--border-color);
+                  border-radius: 5px;
+                  background-color: var(--bg-color);
+                  color: var(--text-main);
+                "
+              ></textarea>
             </div>
 
             <div style="display: flex; gap: 15px; align-items: center">

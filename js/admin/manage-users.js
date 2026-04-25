@@ -1,10 +1,11 @@
 const role = localStorage.getItem("satira_role") || "admin";
 const apiPrefix = `/${role}`;
 
+// Actualizăm rutele conform noilor denumiri
 const endpointSuspend =
-  role === "admin" ? "/admin/disable-account" : "/co-admin/disable-user";
+  role === "admin" ? "/admin/disable-user" : "/co-admin/disable-user";
 const endpointReactivate =
-  role === "admin" ? "/admin/reactivate-account" : "/co-admin/reactivate-user";
+  role === "admin" ? "/admin/reactivate-user" : "/co-admin/reactivate-user";
 
 let currentPage = 1;
 const limit = 100;
@@ -124,13 +125,40 @@ window.showConfirmInline = function (userId, action) {
   const container = document.getElementById(`actions-${userId}`);
   const isSuspend = action === "suspend";
 
-  container.innerHTML = `
+  if (isSuspend) {
+    container.innerHTML = `
+            <div class="inline-confirm" style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
+                <div style="display:flex; gap:5px;">
+                    <select id="duration-${userId}" style="padding: 5px; font-size: 12px; border: 1px solid var(--border-color); border-radius: 4px;">
+                        <option value="1">1 Lună</option>
+                        <option value="3">3 Luni</option>
+                        <option value="6">6 Luni</option>
+                        <option value="permanent">Definitiv</option>
+                    </select>
+                    <input type="text" id="reason-${userId}" placeholder="Motiv obligatoriu..." style="padding: 5px; font-size: 12px; border: 1px solid var(--border-color); border-radius: 4px; width: 140px;">
+                </div>
+                
+                <div style="display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-muted);">
+                    <input type="checkbox" id="legal-hold-${userId}" style="cursor:pointer;">
+                    <label for="legal-hold-${userId}" style="cursor:pointer;" title="Bifează dacă există o investigație oficială (ex: Poliție). Împiedică ștergerea definitivă a contului.">
+                        🔒 Reținere date (Legal Hold / Fraudă)
+                    </label>
+                </div>
+
+                <div>
+                    <button onclick="executeAction('${userId}', '${action}')" class="btn-primary" style="padding: 5px 10px; font-size: 12px; background: #dc3545; border:none;">Confirmă</button>
+                    <button onclick="cancelAction('${userId}', false)" class="btn-outline" style="padding: 5px 10px; font-size: 12px;">Anulează</button>
+                </div>
+            </div>
+        `;
+  } else {
+    container.innerHTML = `
         <div class="inline-confirm">
-            ${isSuspend ? '<input type="text" id="reason-' + userId + '" placeholder="Motiv..." style="padding: 5px; font-size: 12px; border: 1px solid var(--border-color); border-radius: 4px; width: 120px;">' : ""}
-            <button onclick="executeAction('${userId}', '${action}')" class="btn-primary" style="padding: 5px 10px; font-size: 12px; background: ${isSuspend ? "#dc3545" : "#28a745"}; border:none;">Confirmă</button>
-            <button onclick="cancelAction('${userId}', ${isSuspend ? "false" : "true"})" class="btn-outline" style="padding: 5px 10px; font-size: 12px;">Anulează</button>
+            <button onclick="executeAction('${userId}', '${action}')" class="btn-primary" style="padding: 5px 10px; font-size: 12px; background: #28a745; border:none;">Confirmă Reactivarea</button>
+            <button onclick="cancelAction('${userId}', true)" class="btn-outline" style="padding: 5px 10px; font-size: 12px;">Anulează</button>
         </div>
     `;
+  }
 };
 
 window.cancelAction = function (userId, wasDisabled) {
@@ -142,8 +170,26 @@ window.cancelAction = function (userId, wasDisabled) {
 
 window.executeAction = async function (userId, action) {
   const container = document.getElementById(`actions-${userId}`);
-  const reasonInput = document.getElementById(`reason-${userId}`);
-  const reason = reasonInput ? reasonInput.value : "";
+
+  let reasonValue = "";
+  let durationValue = null;
+  let isLegalHold = false;
+
+  if (action === "suspend") {
+    const reasonInput = document.getElementById(`reason-${userId}`);
+    const durationInput = document.getElementById(`duration-${userId}`);
+    const legalHoldInput = document.getElementById(`legal-hold-${userId}`);
+
+    reasonValue = reasonInput ? reasonInput.value.trim() : "";
+    isLegalHold = legalHoldInput ? legalHoldInput.checked : false;
+
+    if (!reasonValue) {
+      alert("Motivul este obligatoriu pentru suspendare!");
+      return;
+    }
+
+    durationValue = durationInput ? durationInput.value : "permanent";
+  }
 
   const email = document.querySelector(
     `#row-${userId} td:nth-child(2)`,
@@ -155,17 +201,35 @@ window.executeAction = async function (userId, action) {
     const endpointToCall =
       action === "suspend" ? endpointSuspend : endpointReactivate;
 
+    let untilValue = null;
+    if (action === "suspend" && durationValue !== "permanent") {
+      const monthsToAdd = parseInt(durationValue);
+      const futureDate = new Date();
+      futureDate.setMonth(futureDate.getMonth() + monthsToAdd);
+      untilValue = futureDate.toISOString().split("T")[0];
+    }
+
+    const payload =
+      action === "suspend"
+        ? {
+            email: email,
+            reason: reasonValue,
+            disabledUntil: untilValue,
+            isUnderLegalHold: isLegalHold,
+          }
+        : { email: email };
+
     await fetchAPI(endpointToCall, {
       method: "PATCH",
       credentials: "include",
-      body: JSON.stringify({ email, reason }),
+      body: JSON.stringify(payload),
     });
 
     container.innerHTML = `<span style="color: #28a745; font-weight: bold;">✅ Gata!</span>`;
 
     setTimeout(() => {
       loadUsers();
-    }, 4000);
+    }, 2000);
   } catch (error) {
     container.innerHTML = `<span class="text-error" style="font-size: 11px;">Eroare: ${error.message}</span>`;
     setTimeout(() => cancelAction(userId, action === "reactivate"), 4000);

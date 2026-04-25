@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Informații Profil | Ziarul cu Minciuni</title>
+    <title>Informații Profil | Ziarul Mincinos</title>
     <meta name="robots" content="noindex, nofollow" />
     <link rel="stylesheet" href="../../css/style.css" />
     <link
@@ -73,11 +73,7 @@
               </button>
 
               <div id="user-menu-top">
-                <button
-                  id="logout-btn"
-                  class="nav-btn-special"
-                  style="background-color: #dc3545"
-                >
+                <button id="logout-btn" class="nav-btn-special btn-logout">
                   <i class="fa-solid fa-arrow-right-from-bracket"></i>
                   <span>Logout</span>
                 </button>
@@ -108,21 +104,11 @@
           <span id="toggle-icon" class="toggle-icon">▼</span>
         </button>
         <div id="sidebar-categories-list"></div>
-        <div
-          id="sidebar-auth-links"
-          style="
-            margin-top: 15px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 5px;
-          "
-        ></div>
+        <div id="sidebar-auth-links" class="sidebar-auth-links-container"></div>
       </div>
     </nav>
 
-    <main
-      class="profile-page-container"
-      style="margin-top: 40px; margin-bottom: 40px; width: 100%"
-    >
+    <main class="profile-page-container profile-page-wrapper">
       <div class="profile-page-header">
         <h2>Informații Profil</h2>
       </div>
@@ -144,23 +130,10 @@
           </div>
 
           <div id="resend-container" class="text-left mt-10 d-none">
-            <button
-              id="resend-btn"
-              style="
-                background: none;
-                border: none;
-                color: var(--btn-special);
-                cursor: pointer;
-                padding: 0;
-                text-decoration: underline;
-              "
-            >
+            <button id="resend-btn" class="resend-btn-clear">
               Retrimite link de verificare
             </button>
-            <div
-              id="resend-message"
-              style="font-size: 12px; margin-top: 5px"
-            ></div>
+            <div id="resend-message" class="resend-msg-text"></div>
           </div>
         </div>
       </div>
@@ -171,12 +144,12 @@
         <a href="change-nickname.html" class="profile-btn"
           >✏️ Editează Nickname</a
         >
-        <a
-          href="change-email.html"
-          id="change-email-section"
-          class="profile-btn"
-          >📧 Schimbă Adresa de Email</a
-        >
+
+        <div id="change-email-section">
+          <a href="change-email.html" class="profile-btn"
+            >📧 Schimbă Adresa de Email</a
+          >
+        </div>
 
         <div id="change-password-section">
           <a href="change-password.html" class="profile-btn"
@@ -184,9 +157,41 @@
           >
         </div>
 
+        <button id="btn-request-data" class="profile-btn">
+          📥 Solicită Arhiva Datelor (GDPR)
+        </button>
+
+        <div id="data-request-status" class="status-message d-none"></div>
+
         <a href="deactivate-account.html" class="profile-btn danger"
-          >⚠️ Dezactivează Contul</a
+          >⏸️ Suspendă Temporar</a
         >
+
+        <a href="delete-account.html" class="profile-btn danger"
+          >⚠️ Ștergere Cont Definitiv</a
+        >
+
+        <div class="profile-links-card mt-20">
+          <h4 class="profile-links-title">Link-uri Utile</h4>
+          <ul class="profile-links-list">
+            <li>
+              <a href="../legal.html?doc=tc" target="_blank">
+                <i class="fa-solid fa-file-contract"></i> Termeni și Condiții
+              </a>
+            </li>
+            <li>
+              <a href="../legal.html?doc=privacy" target="_blank">
+                <i class="fa-solid fa-shield-halved"></i> Politica de
+                Confidențialitate
+              </a>
+            </li>
+            <li>
+              <a href="../legal.html?doc=cookie" target="_blank">
+                <i class="fa-solid fa-cookie-bite"></i> Politica de Cookies
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </main>
 
@@ -199,28 +204,14 @@
 
         <div class="footer-section footer-center">
           <h3 id="footer-support-title">Susține Proiectul</h3>
-          <p id="footer-support-desc" style="margin-bottom: 15px">
-            Se încarcă...
-          </p>
+          <p id="footer-support-desc" class="mb-15">Se încarcă...</p>
 
           <a
             href="https://www.buymeacoffee.com/stefan.danca.dev"
             target="_blank"
-            style="
-              display: inline-block;
-              background-color: #ffdd00 !important;
-              color: #000000 !important;
-              padding: 10px 20px;
-              border-radius: 8px;
-              font-weight: bold;
-              text-decoration: none;
-              font-size: 14px;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-              transition: transform 0.2s;
-            "
+            class="bmac-footer-btn"
           >
-            <i class="fa-solid fa-mug-hot" style="margin-right: 8px"></i> Buy me
-            a Coffee
+            <i class="fa-solid fa-mug-hot bmac-icon"></i> Buy me a Coffee
           </a>
         </div>
 
@@ -233,7 +224,7 @@
       </div>
 
       <div class="footer-bottom" id="footer-copyright-text">
-        &copy; 2026 Ziarul cu Minciuni. Toate drepturile rezervate.
+        &copy; 2026 Ziarul Mincinos. Toate drepturile rezervate.
       </div>
     </footer>
 

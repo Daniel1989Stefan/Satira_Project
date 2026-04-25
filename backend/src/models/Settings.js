@@ -27,6 +27,19 @@ const settingsSchema = new mongoose.Schema(
       phone: { type: String, default: "" },
       website: { type: String, default: "" },
     },
+
+    termsAndConditionsText: {
+      type: String,
+      default: "1. Natura Platformei... \n\n2. Eligibilitate...",
+    },
+    privacyPolicyText: {
+      type: String,
+      default: "1. Cine suntem... \n\n2. Ce date colectăm...",
+    },
+    cookiePolicyText: {
+      type: String,
+      default: "1. Ce sunt cookie-urile... \n\n2. Ce tipuri folosim...",
+    },
   },
   { timestamps: true },
 );
